@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Document</title>
+
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="/static/css/search_results.css">
+
+</head>
+<body>
+	<!-- START NAVIGATION BAR -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+					<a class="navbar-brand" href="#"><img src="/static/images/logo.png" height="100px"></a>
+		    </div>
+				<!-- /end Brand -->
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+						<li><a href="/search"><b>Search Services</b></a></li>
+						{% if session['user'] %}
+							<li><a href="/user">My Dashboard</a></li>
+							<li><a href="/logout">Log Out</a></li>
+						{%else%}
+							<li><a href="/login_reg">Login / Register</a></li>
+						{% endif %}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+    <!-- /END NAV -->
+
+	<div class="container">
+		<div class="col-md-12">
+			<h3>Search Results:</h3>
+		</div>
+		<!-- start results -->
+		{% for i in result %}
+		<div id="results" class="col-md-8">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
+					<div>
+						<h4><a href="#">{{i['s_name']}}</a></h4>
+						<div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div>
+						<ul class="categories">
+					  	  <li>Categories:</li>
+							{% if i['faith_based'] %}
+						  	<li><a href="#">Faith Based</a></li>
+							{% endif %}
+							{% if i['gender_based'] %}
+						  <li><a href="#">Gender Specific</a></li>
+							{% endif %}
+							{% if i['income_restriction'] != 0%}
+						  <li><a href="#">Income Dependent</a></li>
+							{% endif %}
+						</ul>
+					</div>
+
+					<div>
+						<div>
+							<h4>{{i['name']}}</h4>
+							<p>{{i['description']}}</p>
+							{% if i['suite'] == 0 %} 	<!-- will only show suite if it has one-->
+							<p>{{i['street']}}, {{i['city']}} {{i['state']}}, {{i['zip']}}</p>
+							{% else %}
+							<p>{{i['street']}} {{i['suite']}}, {{i['city']}} {{i['state']}}, {{i['zip']}}</p>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		<!-- end results -->
+
+		<div class="col-md-1">
+			<!-- space filler -->
+		</div>
+
+		<div class="col-md-3" id="quick_search">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4>Quick Search:</h4>
+				</div>
+				<div class="panel-body">
+					<ul>
+						<li><a href="/reset">All Services</a></li>
+						<li><a href="/result/faith_based">Faith-Based Services</a></li>
+						<li><a href="/result/gender_based">Gender-Based Services</a></li>
+						<li><a href="/result/income_based">Income-Based Services</a></li>
+						<li><a href="/result/dependent_based">Dependent-Based Services</a></li>
+						<li><a href="/result/req_doc">Required Document-Based Services</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

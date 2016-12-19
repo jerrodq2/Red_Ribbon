@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Document</title>
+
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="/static/css/admin_dash.css">
+
+</head>
+<body>
+    <!-- START NAVIGATION BAR -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+					<a class="navbar-brand" href="#"><img src="/static/images/logo.png" height="100px"></a>
+		    </div>
+				<!-- /end Brand -->
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/search"><b>Search Services</b></a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+    <!-- /END NAV -->
+    <div class="container">
+
+			<!-- START FEEDBACK -->
+			<div class="col-md-4 well">
+					<div class="panel-body">
+						<div id="feedback_box" class="inbox">
+							<table class="table table-hover">
+							  <thead>
+									<tr>
+										<td><b>FEEDBACK INBOX  <span class="badge">2</span></b></td>
+										<td><a href="/all_feedback"><small>view archive</small></a></td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td colspan="2">
+											<b>email@gmail.com</b> <small> 01/14/17 - 16:23 </small> <br />
+											asdjkflajsdfkljadslf
+											<form id="feedback" action="/update_feedback/#" method="post">
+												<input class="btn btn-primary" type="submit" value="Archive">
+											</form>
+										</td>
+									</tr>
+									{% for item in feedback %}
+									<tr>
+										<td colspan="2">
+											<small> {{ item.createdAt }} </small> <br />
+											{{ item.comment }}
+											<form id="feedback" action="/update_feedback/{{ item.id }}" method="post">
+												<input class="btn btn-primary" type="submit" value="Archive">
+											</form>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+					</div>
+				</div>
+			</div>
+			<!-- /END FEEDBACK -->
+			<!-- START SERVICE INFO -->
+
+
+			<div id="add_service" class="col-md-7 panel panel-success">
+				<div class="panel-heading">Add a Service</div>
+				{% with messages = get_flashed_messages() %}
+					{% if messages %}
+						<div class="alert alert-danger">
+						{% for message in messages %}
+							<div role="alert">{{ message }}</div>
+						{% endfor %}
+						</div>
+					{% endif %}
+				{% endwith %}
+
+				<!--START left side of form-->
+				<div class="panel-body">
+					<form action="/add_service" method="post">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Name of the service:</label>
+									<input class="form-control" type="text" name="service_name">
+								</div>
+								<div class="form-group">
+
+									<label>Type of the service:</label>
+
+									<select class="" name="type_name">
+										<option value=""></option>
+										{% for i in types %}
+											<option value="{{i['name']}}">{{i['name']}}</option>
+										{% endfor %}
+									</select>
+
+									<input class="form-control" type="text" name="type_name_new"><!-- REMEBER THIS IS type_name NOT service_name!!!!!!! -->
+								</div>
+								<div class="form-group">
+									<label>Description of the service:</label>
+									<textarea name="description"></textarea>
+								</div>
+								<div class="form-group">
+									<label>Hours the service is available:</label>
+									<input class="form-control" type="text" name="hours">
+								</div>
+								<div class="form-group">
+									<label>Phone number of the service:</label>
+									<input class="form-control" type="text" name="phone">
+								</div>
+							</div>
+							<!-- END left side of form -->
+
+							<!--START right side of form -->
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Email address of the service:</label>
+									<input class="form-control" type="email" name="email">
+								</div>
+								<div class="form-group">
+									<label>Confirm Email address:</label>
+									<input class="form-control" type="text" name="website">
+								</div>
+								<div class="form-group">
+									<label>Gender based service:</label>
+									<select class="form-control" name="gender_based">
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Faith-based service:</label>
+									<select class="form-control" name="faith_based">
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Service for dependants:</label>
+									<select class="form-control" name="dependent_based">
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Service require docments:</label>
+									<select class="form-control" name="req_doc">
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Number of dependants (min)(optional):</label>
+									<input class="form-control" type="text" name="dependent">
+								</div>
+								<div class="form-group">
+									<label>Service annual income restriction (optional):</label>
+									<input class="form-control" type="text" name="income_restriction">
+								</div>
+							</div> <!--END right side of form --></div>
+
+							<div id="address">
+								<div class="form-group">
+									<label>Street Address:</label>
+									<input class="form-control" type="text" name="street">
+								</div>
+								<div class="form-group">
+									<label>Suite # (optional):</label>
+									<input class="form-control" type="text" name="suite">
+								</div>
+								<div class="form-group">
+									<label>State:</label>
+									<input class="form-control" type="text" name="state">
+								</div>
+								<div class="form-group">
+									<label>City:</label>
+									<input class="form-control" type="text" name="city">
+								</div>
+								<div class="form-group">
+									<label>Zip Code:</label>
+									<input class="form-control" type="text" name="zip">
+								</div>
+							</div>
+							<div id="right">
+								<input class="btn btn-primary" type="submit" value="Add Service">
+							</div>
+						</form>
+					</div>
+
+					<!-- /END Service Info -->
+    </div>
+
+</body>
+</html>

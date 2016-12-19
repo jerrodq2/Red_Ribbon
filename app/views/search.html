@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>RedRibbon.US </title>
+	<meta name="description" content="RedRibbon.US was created to provide the
+		Dallas community impacted by HIV/AIDS with a centralized repository of
+		up-to-date, accurate information regarding local services.">
+
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+
+	<!-- START NAVIGATION BAR -->
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+				<a class="navbar-brand" href="#"><img src="/static/images/logo.png" height="100px"></a>
+	    </div>
+			<!-- /end Brand -->
+
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav navbar-right">
+	        <li><a href="/search"><b>Search Services</b></a></li>
+					{% if session['user'] %}
+						<li><a href="/user">My Dashboard</a></li>
+						<li><a href="/logout">Log Out</a></li>
+					{%else%}
+						<li><a href="/login_reg">Login / Register</a></li>
+					{% endif %}
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div>
+	</nav>
+	<!-- /END NAV -->
+
+	<div class="container">
+
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<form action="/update_user/pref" method="post">
+						<div class="form-group">
+							<label>Return gender dependent services only:</label>
+							<select class="form-control" name="gender">
+								<option value="No">No</option>
+								<option value="Yes">Yes</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Return faith-based services only:</label>
+							<select class="form-control" name="faith">
+								<option value="No">No</option>
+								<option value="Yes">Yes</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Return child-based services only:</label>
+							<select class="form-control" name="dependent">
+								<option value="No">No</option>
+								<option value="Yes">Yes</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Return income restricted services only:</label>
+							<select class="form-control" name="income">
+								<option value="No">No</option>
+								<option value="Yes">Yes</option>
+							</select>
+						</div>
+						<input class="btn btn-primary" type="submit" value="Update Preferences">
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="col-md-3" id="quick_search">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Quick Search:</h4>
+					</div>
+					<div class="panel-body">
+						<ul>
+							<li><a href="/reset">All Services</a></li>
+							<li><a href="/result/faith_based">Faith-Based Services</a></li>
+							<li><a href="/result/gender_based">Gender-Based Services</a></li>
+							<li><a href="/result/income_based">Income-Based Services</a></li>
+							<li><a href="/result/dependent_based">Dependent-Based Services</a></li>
+							<li><a href="/result/req_doc">Required Document-Based Services</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+	</div>
+
+
+</body>
+</html>

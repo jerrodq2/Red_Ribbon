@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Document</title>
+
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<script>
+		$(document).ready(function() {
+			// initial page setup
+			$('#feedback_input').hide();
+			$('#edit').hide();
+
+			$('#feedback').click(function(event) {
+				$('#feedback_input').show(100);
+			});
+
+			$('#feedback_input a').click(function(event) {
+				/* TODO: ajax call to send feedback */
+
+				$('#feedback_input').hide(100);
+				return false;
+			});
+
+			$('#edit_service').click(function(event) {
+				$('#display').hide(100);
+				$('#edit').show(100);
+			});
+		});
+	</script>
+
+	<style>
+		a{
+			text-decoration: none;
+			color: black;
+		}
+
+		a:hover{
+			color: blue;
+		}
+
+		img{
+			height: 150px;
+			vertical-align: top;
+			margin-right: 10px;
+		}
+
+		ul.categories{
+			padding: 0px;
+		}
+
+		ul.categories li{
+			display: inline;
+			margin-right: 10px;
+		}
+
+		.main-info{
+			border-right: 2px solid lightgray;
+		}
+
+		textarea{
+			resize: vertical;
+		}
+	</style>
+</head>
+<body>
+	<!-- START NAVIGATION BAR -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><b>REDRIBBON.US</b></a>
+        </div>
+            <!-- /end Brand -->
+						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				      <ul class="nav navbar-nav navbar-right">
+				        <li><a href="/search"><b>Search Services</b></a></li>
+								{% if session['user'] %}
+									<li><a href="/user">My Dashboard</a></li>
+									<li><a href="/logout">Log Out</a></li>
+								{%else%}
+									<li><a href="/login_reg">Login / Register</a></li>
+								{% endif %}
+				      </ul>
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+    <!-- /END NAV -->
+
+	<div class="container">
+		<div id="display">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="main-info col-md-9">
+						<div>
+							<h2>Service Name
+								<span class="like">&#9825;</span>
+								<small><a id="edit_service" href="#">Edit Service</a></small>
+							</h2>
+							<div class="rating"><h4>&#9733;&#9733;&#9733;&#9733;&#9734;</h4></div>
+						</div>
+						<div>
+							<ul class="categories">
+							  <li>Categories:</li>
+							  <li>Faith Based</li>
+							  <li>Gender Specific</li>
+							  <li>Income Dependent</li>
+							</ul>
+						</div>
+
+						<div>
+							<div>
+								<h3>Service Type</h3>
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt ducimus quaerat, praesentium asperiores numquam earum excepturi eius veritatis dolor cum laudantium ab error, neque iure sunt amet aliquid aliquam doloremque.<br><br>
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt ducimus quaerat, praesentium asperiores numquam earum excepturi eius veritatis dolor cum laudantium ab error, neque iure sunt amet aliquid aliquam doloremque.<br><br>
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt ducimus quaerat, praesentium asperiores numquam earum excepturi eius veritatis dolor cum laudantium ab error, neque iure sunt amet aliquid aliquam doloremque.<br><br>
+								</p>
+							</div>
+						</div>
+
+						<div id="rating_info">
+							<form action="">
+								<div class="form-group">
+									<label>Rating</label>
+									<select class="form-control" name="rating">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Comment</label>
+									<textarea class="form-control" name="comment"></textarea>
+								</div>
+							</form>
+
+							<div id="ratings">
+								<div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam mollitia facere doloremque necessitatibus ipsa, ipsum ipsam nemo optio atque voluptas expedita. Obcaecati asperiores, id voluptatem, magnam aut quod dolorum adipisci!</p>
+								<div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam mollitia facere doloremque necessitatibus ipsa, ipsum ipsam nemo optio atque voluptas expedita. Obcaecati asperiores, id voluptatem, magnam aut quod dolorum adipisci!</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="text-center">
+							<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
+							<h5>Website: <a href="#" target="_blank">www.service-site.com</a></h5>
+							<h5><a id="feedback" href="#">See something wrong?</a></h5>
+							<div id="feedback_input">
+								<label>Summarize issue:</label>
+								<textarea class="form-control" name="comment"></textarea>
+								<a class="btn btn-default" href="/update_feedback/{{service_id}}" role="button">Send</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="edit">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<form action="/update/service" method="post">
+						<input type="hidden" name="service_id" value="{{ service['id']}}">
+						<div class="form-group">
+							<label>Edit Service Name:</label>
+							<input class="form-control" type="text" name="name" value="{{ service['name'] }}">
+						</div>
+						<div class="form-group">
+							<label>Edit Eligibility Requirements:</label>
+							<select multiple class="form-control">
+							  <option value="{{requirement}}">{{requirement}}</option>
+							  <option value="{{requirement}}">{{requirement}}</option>
+							  <option value="{{requirement}}">{{requirement}}</option>
+							  <option value="{{requirement}}">{{requirement}}</option>
+							</select>
+						</div><div class="form-group">
+							<label>Edit Service Type:</label>
+							<input class="form-control" type="text" name="type" value="{{ service['type'] }}">
+						</div><div class="form-group">
+							<label>Edit Service Description:</label>
+							<textarea class="form-control" name="description">{{ service['description'] }}</textarea>
+						</div>
+						<div class="form-group">
+							<label>Edit Website:</label>
+							<input class="form-control" type="text" name="website" value="{{ service['website'] }}">
+						</div>
+						<div class="form-group">
+							<label>Edit Image URL:</label>
+							<input class="form-control" type="text" name="image_url" value="{{ service['image_url'] }}">
+						</div>
+						<input type="submit" value="Save Changes">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

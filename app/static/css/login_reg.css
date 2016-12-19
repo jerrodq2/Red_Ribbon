@@ -1,0 +1,14 @@
+
+.reg_login{
+  display:inline-block;
+  margin-right: 25px;
+  width: 400px;
+}
+
+table{
+  text-align: right;
+}
+
+input[type="submit"]{
+  margin: 7px 0px;
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Document</title>
+
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- START NAVIGATION BAR -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+					<a class="navbar-brand" href="#"><img src="/static/images/logo.png" height="100px"></a>
+		    </div>
+				<!-- /end Brand -->
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/search"><b>Search Services</b></a></li>
+						<li><a href="/user">My Dashboard</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+    <!-- /END NAV -->
+    <div class="container">
+			<!-- START EDIT USER -->
+			<div class="col-md-4">
+				<h4>Edit User Info Below:</h4>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<form action="/update_user" method="post">
+
+							{% with messages = get_flashed_messages(category_filter=['user_errors']) %}
+			          {% if messages %}
+									<div class="alert alert-danger">
+			            {% for message in messages %}
+										<div role="alert">{{ message }}</div>
+			            {% endfor %}
+									</div>
+			          {% endif %}
+			        {% endwith %}
+
+							<div class="form-group">
+								<label>New Email:</label>
+								<input class="form-control" type="email" name="email" value="{{ session['user']['email'] }}">
+							</div>
+							<div class="form-group">
+								<label>Old Password:</label>
+								<input class="form-control" type="password" name="old_password">
+							</div>
+							<div class="form-group">
+								<label>New Password:</label>
+								<input class="form-control" type="password" name="password">
+							</div>
+							<div class="form-group">
+								<label>Confirm New Password:</label>
+								<input class="form-control" type="password" name="con_password">
+							</div>
+							<input class="btn btn-primary" type="submit" value="Update Information">
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- /END EDIT USER -->
+			<!-- START EDIT PREFERENCES -->
+			<div class="col-md-4">
+			<h4>Set Prefrences Below:</h4>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<form action="/update_user/pref" method="post">
+
+							{% with messages = get_flashed_messages(category_filter=['pref']) %}
+			          {% if messages %}
+									<div class="alert alert-danger">
+			            {% for message in messages %}
+										<div role="alert">{{ message }}</div>
+			            {% endfor %}
+									</div>
+			          {% endif %}
+			        {% endwith %}
+							<div class="form-group">
+								<label>Return Gender Dependent Services Only:</label>
+								<select class="form-control" name="gender">
+									<option value="0">No</option>
+									{% if preferences['gender_based'] == 1 %}
+										<option value="1" selected="selected">Yes</option>
+									{% else %}
+										<option value="1">Yes</option>
+									{% endif %}
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Return Faith-based Services Only:</label>
+								<select class="form-control" name="faith">
+									<option value="0">No</option>
+									{% if preferences['faith_based'] == 1 %}
+										<option value="1" selected="selected">Yes</option>
+									{% else %}
+										<option value="1">Yes</option>
+									{% endif %}
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Return Child-based Services Only:</label>
+								<select class="form-control" name="dependent">
+									<option value="0">No</option>
+									{% if preferences['dependent_based'] == 1 %}
+										<option value="1" selected="selected">Yes</option>
+									{% else %}
+										<option value="1">Yes</option>
+									{% endif %}
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Return Income Restricted Services Only:</label>
+								<select class="form-control" name="income">
+									<option value="0">No</option>
+									{% if preferences['income_restriction'] == 1 %}
+										<option value="1" selected="selected">Yes</option>
+									{% else %}
+										<option value="1">Yes</option>
+									{% endif %}
+								</select>
+							</div>
+							<input class="btn btn-primary" type="submit" value="Update Preferences">
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- /END PREF -->
+    </div>
+</body>
+</html>

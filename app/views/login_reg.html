@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>RedRibbon.US </title>
+	<meta name="description" content="RedRibbon.US was created to provide the
+		Dallas community impacted by HIV/AIDS with a centralized repository of
+		up-to-date, accurate information regarding local services.">
+
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" href="/static/css/login_reg.css">
+
+</head>
+<body>
+
+	<!-- START NAVIGATION BAR -->
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+				<a class="navbar-brand" href="#"><img src="/static/images/logo.png" height="100px"></a>
+	    </div>
+			<!-- /end Brand -->
+
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav navbar-right">
+	        <li><a href="/search" class="active"><b>Search Services</b></a></li>
+					<li><a href="/login_reg">Login / Register</a></li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div>
+	</nav>
+	<!-- /END NAV -->
+
+	<div class="container">
+		<div class="reg_login">
+      <h2><b>Registration</b></h2>
+        {% with messages = get_flashed_messages(category_filter=['regis_errors']) %}
+          {% if messages %}
+						<div class="alert alert-danger">
+            {% for message in messages %}
+							<div role="alert">{{ message }}</div>
+            {% endfor %}
+						</div>
+          {% endif %}
+        {% endwith %}
+
+      <form action='/register' method='POST'>
+      <table>
+        <tbody>
+          <tr>
+            <td>Alias:</td>
+          <td><input type="text" name="alias" value="{{session['alias']}}" /></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+          <td><input type="text" name="email" value="{{session['email']}}" /></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+          <td><input type="password" name="password" /></td>
+        </tr>
+        <tr>
+            <td>Confirm Password:</td>
+          <td><input type="password" name="con_password" /></td>
+        </tr>
+        <tr>
+          <td><input type=hidden name="action" value="reg" /></td>
+          <td><input class="btn btn-primary" type="submit" value="Register"></td>
+      </tbody>
+    	</table>
+      </form>
+    </div>
+
+    <div class="reg_login">
+      <h3><b>Log In</b></h3>
+        {% with messages = get_flashed_messages(category_filter=['login_errors']) %}
+					{% if messages %}
+						<div class="alert alert-danger">
+						{% for message in messages %}
+							<div role="alert">{{ message }}</div>
+						{% endfor %}
+						</div>
+					{% endif %}
+        {% endwith %}
+      <form action='/login' method='POST'>
+        <table>
+          <tbody>
+            <tr>
+              <td>Email:</td>
+              <td><input type="text" name="email1" value="{{session['email1']}}"></td>
+            </tr>
+            <tr>
+              <td>Password:</td>
+              <td><input type="password" name="password1"></td>
+            </tr>
+            <tr>
+              <td><input type=hidden name="action" value="login" /></td>
+              <td><input class="btn btn-success" type="submit" value="Login"></td>
+            </tr>
+      </form>
+	</div>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Document</title>
+
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="/static/css/admin_dash.css">
+
+</head>
+<body>
+    <!-- START NAVIGATION BAR -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+					<a class="navbar-brand" href="#"><img src="/static/images/logo.png" height="100px"></a>
+		    </div>
+				<!-- /end Brand -->
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/search"><b>Search Services</b></a></li>
+						<li><a href="/admin">My Dashboard</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+    <!-- /END NAV -->
+    <div class="container">
+			<!-- START FEEDBACK -->
+			<div class="col-md-4 well">
+					<div class="panel-body">
+						<div id="feedback_box" class="inbox">
+							<table class="table table-hover">
+							  <thead>
+									<tr>
+										<td><b>FEEDBACK INBOX  <span class="badge">2</span></b></td>
+
+
+										<td><a href="/admin"><small>back to dash</small></a></td>
+									</tr>
+								</thead>
+								<tbody>
+
+										<tr>
+											<td colspan="2">
+												<b>email@gmail.com</b> <small> 01/14/17 - 16:23 </small> <br />
+												asdjkflajsdfkljadslf
+												<form id="feedback" action="/archive_feedback/#" method="post">
+													<input class="btn btn-primary" type="submit" value="Archive">
+												</form>
+
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<b>email@gmail.com</b> <small> 01/14/17 - 16:23 </small> <br />
+												asdjkflajsdfkljadslf
+												<form id="feedback" action="/archive_feedback/#" method="post">
+													<input class="btn btn-primary" type="submit" value="Archive">
+												</form>
+
+
+											</td>
+										</tr>
+
+								</tbody>
+							</table>
+					</div>
+				</div>
+			</div>
+			<!-- /END FEEDBACK -->
+
+			<div id="archive" class="panel col-md-7 panel-default">
+				<div class="panel-heading">
+    			<h3 class="panel-title">Archived Feedback</h3>
+				</div>
+			  <div class="panel-body">
+
+					<table class="table table-hover">
+						<tbody>
+								<tr>
+									<td>
+										<b>email@gmail.com</b> <small> 01/14/17 - 16:23 </small> <br />
+										asdjkflajsdfkljadslf
+										<form id="feedback" action="/activate_feedback/#" method="post">
+											<input class="btn btn-primary" type="submit" value="Archive">
+										</form>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<b>email@gmail.com</b> <small> 01/14/17 - 16:23 </small> <br />
+										asdjkflajsdfkljadslf
+										<form id="feedback" action="/activate_feedback/#" method="post">
+											<input class="btn btn-primary" type="submit" value="Archive">
+										</form>
+									</td>
+								</tr>
+						</tbody>
+					</table>
+
+			  </div>
+			</div>
+
+
+
+</body>
+</html>

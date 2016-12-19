@@ -1,0 +1,38 @@
+Priorities (highest to lowest): 
+- Admin dashboard
+	- add/update/inactivate service profiles
+	- feedback (misinformation)
+		- view active vs inactive (processed/dismissed) requests
+	- view flagged ratings
+	
+- Service Profiles (generated through admin portal)
+	- profile includes (all should be editable):
+		- name
+		- type of service
+			- service category 
+			- faith based
+			- eligibility requirements
+				- required documentation for use of service
+				- Service areas (zip code based)
+				- Income restrictions
+				- Gender (make sure to include ALL options)
+				- Dependants
+		- general about info:
+			- description
+			- location (full address + map?)
+			- contact info & hrs of operation
+			- link to actual website
+	- ability to favorite (only for logged in users)
+	- rating on profile services (rating + comment) + ability to flag ratings/comments
+	- ability for user to provide feedback about services to admin
+   
+- User dashboard
+	- required registration info
+		- alias (default to not shown when giving ratings)
+		- email
+		- password
+  	- search for service profiles based off of basic questionnaire
+	- view recommended services
+	- favorite/unfave services
+	
+	
