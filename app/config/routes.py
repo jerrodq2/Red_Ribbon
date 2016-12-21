@@ -18,10 +18,14 @@ routes['POST']['/update_user'] = 'Users#update_user'
 # Searching & results routes
 routes['/search'] = 'Services#index'
 routes['/result'] = 'Services#result'
-routes['/results/<name>'] = 'Services#result_specific'
-routes['/reset'] = 'Services#reset'
-routes['POST']['/search/process'] = 'Services#search_process'
+routes['/result/<name>'] = 'Services#result_specific'
+routes['/add/fav/<id>'] = 'Services#add_fav'
+routes['/destroy/fav/<id>'] = 'Services#destroy_fav'
+routes['/flag/rating/<id>/<sid>'] = 'Services#flag_rating'
+routes['POST']['/results'] = 'Services#multiple_result_specific'
 routes['POST']['/add_rating/service/<id>'] = 'Services#add_rating'
+
+
 
 # Single service view
 routes['/service/<id>'] = 'Services#profile'
@@ -31,8 +35,8 @@ routes['/admin'] = 'Users#admin'
 routes['/update/service/<id>'] = 'Services#update_service'
 routes['POST']['/add_service'] = 'Services#add_service'
 
-# Feedback routes - ignore untill implemented
+# Feedback routes - ignore until implemented
 routes['/all_feedback'] = 'Users#admin_feedback'
-routes['/update_feedback/<id>'] = 'Services#update_feedback'
-routes['/active_feedback/<id>'] = 'Services#activate_feedback'
+routes['/deactivate_feedback/<id>'] = 'Services#deactivate_feedback'
+routes['/activate_feedback/<id>'] = 'Services#activate_feedback'
 routes['POST']['/add_feedback/service/<id>'] = 'Services#add_feedback'

@@ -28,6 +28,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/search"><b>Search Services</b></a></li>
+            <li><a href="/result"><b>All Services</b></a></li>
             <li><a href="/logout">Logout</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
@@ -96,21 +97,26 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									<label>Name of the service:</label>
-									<input class="form-control" type="text" name="service_name">
+									<input class="form-control" type="text" name="name">
 								</div>
+
 								<div class="form-group">
-
 									<label>Type of the service:</label>
-
 									<select class="" name="type_name">
 										<option value=""></option>
 										{% for i in types %}
 											<option value="{{i['name']}}">{{i['name']}}</option>
 										{% endfor %}
 									</select>
-
+									<p class='col-md-offset-2'><b>Or</b></p>
+									<label>New Type of Service</label>
 									<input class="form-control" type="text" name="type_name_new"><!-- REMEBER THIS IS type_name NOT service_name!!!!!!! -->
 								</div>
+
+								<div class="form-group">
+
+								</div>
+
 								<div class="form-group">
 									<label>Description of the service:</label>
 									<textarea name="description"></textarea>
@@ -122,6 +128,7 @@
 								<div class="form-group">
 									<label>Phone number of the service:</label>
 									<input class="form-control" type="text" name="phone">
+									<p>Format: (123)456-7890</p>
 								</div>
 							</div>
 							<!-- END left side of form -->
@@ -134,35 +141,43 @@
 								</div>
 								<div class="form-group">
 									<label>Confirm Email address:</label>
+									<input class="form-control" type="text" name="conf_email">
+								</div>
+								<div class="form-group">
+									<label>Website address (optional):</label>
 									<input class="form-control" type="text" name="website">
 								</div>
 								<div class="form-group">
 									<label>Gender based service:</label>
 									<select class="form-control" name="gender_based">
-										<option value="1">Yes</option>
 										<option value="0">No</option>
+										<option value="1">Yes</option>
 									</select>
 								</div>
 								<div class="form-group">
 									<label>Faith-based service:</label>
 									<select class="form-control" name="faith_based">
-										<option value="1">Yes</option>
 										<option value="0">No</option>
+										<option value="1">Yes</option>
 									</select>
 								</div>
 								<div class="form-group">
 									<label>Service for dependants:</label>
 									<select class="form-control" name="dependent_based">
-										<option value="1">Yes</option>
 										<option value="0">No</option>
+										<option value="1">Yes</option>
 									</select>
 								</div>
 								<div class="form-group">
-									<label>Service require docments:</label>
+									<label>Service requires docments:</label>
 									<select class="form-control" name="req_doc">
-										<option value="1">Yes</option>
 										<option value="0">No</option>
+										<option value="1">Yes</option>
 									</select>
+								</div>
+								<div class="form-group">
+								<label>Required Documents (optional)</label>
+								<input class="form-control" type="text" name="documents">
 								</div>
 								<div class="form-group">
 									<label>Number of dependants (min)(optional):</label>
@@ -170,7 +185,7 @@
 								</div>
 								<div class="form-group">
 									<label>Service annual income restriction (optional):</label>
-									<input class="form-control" type="text" name="income_restriction">
+									<input class="form-control" type="number" name="income_restriction">
 								</div>
 							</div> <!--END right side of form --></div>
 
