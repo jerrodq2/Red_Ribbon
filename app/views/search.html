@@ -29,6 +29,10 @@
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav navbar-right">
 	        <li><a href="/search"><b>Search Services</b></a></li>
+					<li><a href="/result"><b>All Services</b></a></li>
+					{% if session['user'] and session['user']['admin_status'] %}
+						<li><a href="/admin"><b>Admin</b></a></li>
+					{% endif %}
 					{% if session['user'] %}
 						<li><a href="/user">My Dashboard</a></li>
 						<li><a href="/logout">Log Out</a></li>
@@ -46,36 +50,43 @@
 		<div class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<form action="/update_user/pref" method="post">
+					<form action="/results" method="post">
 						<div class="form-group">
-							<label>Return gender dependent services only:</label>
-							<select class="form-control" name="gender">
-								<option value="No">No</option>
-								<option value="Yes">Yes</option>
+							<label>Return gender-based services only:</label>
+							<select class="form-control" name="gender_based">
+								<option value="0">No</option>
+								<option value="1">Yes</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label>Return faith-based services only:</label>
-							<select class="form-control" name="faith">
-								<option value="No">No</option>
-								<option value="Yes">Yes</option>
+							<select class="form-control" name="faith_based">
+								<option value="0">No</option>
+								<option value="1">Yes</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label>Return child-based services only:</label>
-							<select class="form-control" name="dependent">
-								<option value="No">No</option>
-								<option value="Yes">Yes</option>
+							<select class="form-control" name="dependent_based">
+								<option value="0">No</option>
+								<option value="1">Yes</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Return document-based services only:</label>
+							<select class="form-control" name="req_doc">
+								<option value="0">No</option>
+								<option value="1">Yes</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label>Return income restricted services only:</label>
-							<select class="form-control" name="income">
-								<option value="No">No</option>
-								<option value="Yes">Yes</option>
+							<select class="form-control" name="income_restriction">
+								<option value="0">No</option>
+								<option value="1">Yes</option>
 							</select>
 						</div>
-						<input class="btn btn-primary" type="submit" value="Update Preferences">
+						<input class="btn btn-primary" type="submit" value="Search">
 					</form>
 				</div>
 			</div>
@@ -89,7 +100,7 @@
 					</div>
 					<div class="panel-body">
 						<ul>
-							<li><a href="/reset">All Services</a></li>
+							<li><a href="/result">All Services</a></li>
 							<li><a href="/result/faith_based">Faith-Based Services</a></li>
 							<li><a href="/result/gender_based">Gender-Based Services</a></li>
 							<li><a href="/result/income_based">Income-Based Services</a></li>

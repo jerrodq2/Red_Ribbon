@@ -28,6 +28,10 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
 						<li><a href="/search"><b>Search Services</b></a></li>
+            <li><a href="/result"><b>All Services</b></a></li>
+						{% if session['user']['admin_status'] %}
+							<li><a href="/admin"><b>Admin</b></a></li>
+						{% endif %}
 							<li><a href="/edit_user">Edit Settings</a></li>
 							<li><a href="/logout">Log Out</a></li>
           </ul>
@@ -49,8 +53,9 @@
 					<div class="panel-heading">
 						<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
 						<div>
-							<h4><a href="/service/{{rec['id']}}">{{rec['s_name']}}</a></h4>
-							<div class="rating">{{rec['rating']}}&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+							<h4><a href="/service/{{rec['sid']}}">{{rec['s_name']}}</a></h4>
+							<div class="rating">{{rec['rating']}}&#9733;&#9733;&#9733;&#9733;&#9734; <a href="#">Rate</a></div>
+							<p>Type: {{ rec['name'] }}</p>
 						</div>
 					</div>
 					<div class="panel-body">
@@ -58,25 +63,43 @@
 							<ul class="categories">
 								<li>Categories:</li>
 								{% if rec['faith_based']%}
-								<li><a href="#">Faith Based</a></li>
+								<li><a href="/result/faith_based">Faith Based</a></li>
 								{% endif %}
 								{% if rec['gender_based']%}
-								<li><a href="#">Gender Specific</a></li>
+								<li><a href="/result/gender_based">Gender Specific</a></li>
+								{% endif %}
+								{% if rec['req_doc'] %}
+									<li><a href="/result/req_doc">Documents Required</a></li>
+								{% endif %}
+								{% if rec['dependent_based'] %}
+									<li><a href="/result/dependent_based">Dependent Based</a></li>
 								{% endif %}
 								{% if rec['income_restriction'] %}
-								<li><a href="#">Income Dependent</a></li>
+								<li><a href="/result/income_based">Income Dependent, Minimum: ${{rec['income_restriction']}}</a></li>
 								{% endif %}
 							</ul>
+							{% if rec['req_doc'] %}
+								<p>Required Documents: {{ rec['documents']}}</p>
+							{% else %}
+								<p>Required Documents: None </p>
+							{% endif %}
 						</div>
 
 						<div>
 							<div>
-								<h4>{{rec['name']}}</h4>
 								<p>{{rec['description']}}</p>
 								{% if rec['suite'] == 0 %} 	<!-- will only show suite if it has one-->
 							<p>{{rec['street']}}, {{rec['city']}} {{rec['state']}}, {{rec['zip']}}</p>
 							{% else %}
 							<p>{{rec['street']}} {{rec['suite']}}, {{rec['city']}} {{rec['state']}}, {{rec['zip']}}</p>
+							{% endif %}
+							{% if rec['website'] %}
+								<p>Phone: {{rec['phone']}}, Email: {{rec['email']}}, Website: <a href="{{rec['website']}}">{{rec['website']}}</a></p>
+							{% else %}
+								<p>Phone: {{rec['phone']}}, Email: {{rec['email']}}, Website: N/A</p>
+							{% endif %}
+							{% if session['user'] %}
+								<p><a href="/add/fav/{{rec['sid']}}">Add to Favorites</a></p>
 							{% endif %}
 							</div>
 						</div>
@@ -96,7 +119,7 @@
 		<div class="col-md-6">
 			<div class="panel panel-success">
 				<div class="panel-heading">
-					<h4>My Favorites:</h4>
+					<h4>My Favorites</h4>
 				</div>
 				<div class="panel-body" id="favs">
 
@@ -106,37 +129,58 @@
 						<div class="panel-heading">
 							<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
 							<div>
-								<h4><a href="/service/{{fav['id']}}">{{fav['name']}}</a></h4>
-								<div class="rating">{{fav['rating']}}&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+								<h4><a href="/service/{{fav['sid']}}">{{fav['s_name']}}</a></h4>
+								<div class="rating">{{fav['rating']}}&#9733;&#9733;&#9733;&#9733;&#9734; <a href="#">Rate</a></div>
+								<p>Type: {{fav['name']}}</p>
 							</div>
 						</div>
 						<div class="panel-body">
 							<div>
 								<ul class="categories">
 									<li>Categories:</li>
-									{% if fav['faith']%}
-									<li><a href="#">Faith Based</a></li>
+									{% if fav['faith_based'] %}
+						  			<li><a href="/result/faith_based">Faith Based</a></li>
 									{% endif %}
-									{% if fav['gender']%}
-									<li><a href="#">Gender Specific</a></li>
+									{% if fav['gender_based'] %}
+						  			<li><a href="/result/gender_based">Gender Specific</a></li>
 									{% endif %}
-									{% if fav['income'] %}
-									<li><a href="#">Income Dependent</a></li>
+									{% if fav['req_doc'] %}
+										<li><a href="/result/req_doc">Documents Required</a></li>
 									{% endif %}
-									{% if fav['child']%}
-									<li><a href="#">Child-Based</a></li>
+								{% if fav['dependent_based'] %}
+									<li><a href="/result/dependent_based">Dependent Based</a></li>
+								{% endif %}
+									{% if fav['income_restriction'] != 0%}
+						  			<li><a href="/result/income_based">Income Dependent, Minimum: ${{fav['income_restriction']}}</a></li>
 									{% endif %}
 								</ul>
+								{% if fav['req_doc'] %}
+									<p>Required Documents: {{ fav['documents']}}</p>
+								{% else %}
+									<p>Required Documents: None </p>
+								{% endif %}
 							</div>
 
 							<div>
 								<div>
-									<h4>{{fav['type']}}</h4>
-									<p>{{fav['description']}}</p>
+									<p>Description: {{fav['description']}}</p>
+									{% if fav['suite'] == 0 %} 	<!-- will only show suite if it has one-->
+										<p>{{fav['street']}}, {{fav['city']}} {{fav['state']}}, {{fav['zip']}}</p>
+									{% else %}
+										<p>{{fav['street']}} {{fav['suite']}}, {{fav['city']}} {{fav['state']}}, {{fav['zip']}}</p>
+									{% endif %}
+									{% if fav['website'] %}
+										<p>Phone: {{fav['phone']}}, Email: {{fav['email']}}, Website: <a href="{{fav['website']}}">{{fav['website']}}</a></p>
+									{% else %}
+										<p>Phone: {{fav['phone']}}, Email: {{fav['email']}}, Website: N/A</p>
+									{% endif %}
+									<p><a href="/destroy/fav/{{fav['sid']}}">Remove From Favorites</a></p>
 								</div>
 							</div>
 						</div>
+
 					</div>
+
 				{% endfor %}
 				</div>
 			</div>

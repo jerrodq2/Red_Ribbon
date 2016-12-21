@@ -57,7 +57,6 @@ class Users(Controller):
 		return redirect('/edit_user')
 
 	def update_pref(self):
-		print request.form
 		result = self.models['User'].update_prefrences_by_id(session['user']['id'], request.form.copy())
 		if result['status'] == True:
 			return redirect('/user')
@@ -66,6 +65,8 @@ class Users(Controller):
 			return redirect('/edit_user')
 
 	def admin(self):
+		if session['user']['admin_status'] == 0:
+			return redirect('/user')
 		feedback = self.models['Dashboard'].get_feedback_by_active_status()
 		types = self.models['Service'].types()
 		return self.load_view('admin_dash.html', feedback = feedback, types = types)
