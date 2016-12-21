@@ -27,15 +27,20 @@ class Services(Controller):
 		result = self.models['Service'].multiple_result_specific(request.form.copy())
 		return self.load_view('search_results.html', result = result)
 
-# routes['/update_feedback/<id>'] = 'Services#update_feedback'
-	def update_feedback(self, id):
-		self.models['Dashboard'].update_feedback(id)
+# routes['/deactivate_feedback/<id>'] = 'Services#update_feedback'
+	def deactivate_feedback(self, id):
+		self.models['Dashboard'].deactivate_feedback(id)
 		return redirect('/admin')
 
-# route['/active_feedback/<id>'] = 'Services#activate_feedback'
+#routes['/all_feedback/deactivate_feedback/<id>'] = 'Services#all_feedback_deactivate_feedback'
+	def all_feedback_deactivate_feedback(self, id):
+		self.models['Dashboard'].deactivate_feedback(id)
+		return redirect('/all_feedback')
+
+# route['/activate_feedback/<id>'] = 'Services#activate_feedback'
 	def activate_feedback(self, id):
 		self.models['Dashboard'].activate_feedback(id)
-		return redirect('/admin_feedback')
+		return redirect('/all_feedback')
 
 
 # routes['POST']['/add_feedback/service/<id>'] = 'Services#add_feedback'
@@ -52,7 +57,8 @@ class Services(Controller):
 	def profile(self, id):
 		profile = self.models['Service'].profile(id)
 		comments = self.models['Service'].comments(id)
-		return self.load_view('service_profile.html', profile = profile, comments = comments)
+		types = self.models['Service'].types()
+		return self.load_view('service_profile.html', profile = profile, comments = comments, types = types)
 
 # routes['POST']['/add_rating/service/<id>'] = 'Services#add_rating'
 	def add_rating(self, id):
@@ -69,9 +75,11 @@ class Services(Controller):
 		self.models['Dashboard'].flag_rating(id)
 		return redirect('/service/'+sid)
 
-# routes['/update/service'] = 'Services#update_service'
-	def update_service(self):
-		self.models['Service'].update_service(request.form.copy(), id)
+# routes['/update/service/<id>'] = 'Services#update_service'
+	def update_service(self, id):
+		update = self.models['Service'].update_service(request.form.copy(), id)
+		for message in update['errors']:
+			flash(message, 'update')
 		return redirect('/service/'+id)
 
 # route['POST']['/add_service'] = 'Services#add_service'

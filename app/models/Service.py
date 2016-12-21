@@ -6,7 +6,7 @@ class Service(Model):
 		super(Service, self).__init__()
 
 	def profile(self, id):
-		profile = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, t.name, a.zip, a.street, a.suite, a.state, a.city FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id WHERE s.id = :id', {'id': id})
+		profile = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id WHERE s.id = :id', {'id': id})
 		return profile[0]
 
 	def comments(self, id):
@@ -94,14 +94,84 @@ class Service(Model):
 		self.db.query_db('INSERT INTO address (zip, suite, state, city, street, service_id) VALUES (:zip, :suite, :state, :city, :street, :service_id)', info)
 		return {'errors': errors}
 
-	def update_service(self, info):
-		self.db.query_db('UPDATE service SET name = :name, description = :description, hours = :hours, phone = :phone, email = :email, website = :website, faith_based = :faith_based, gender_based = :gender_based, dependent_based = :dependent_based, income_restriction = :income_restriction, req_doc = :req_doc, updated_at = Now() WHERE id = :id',info)
+	def update_service(self, info, id):
+		# START VALIDATIONS
+		errors = []
+		EMAIL_REGEX = re.compile(r'^[a-za-z0-9\.\+_-]+@[a-za-z0-9\._-]+\.[a-za-z]*$')
+		phone_regex = re.compile(r'\((\d{3})\)\d{3}-\d{4}')
+
+		if not info['name']:
+			errors.append('Service name cannot be blank')
+		if not info['type_name'] and not info['type_name_new']:
+			errors.append('Must select a type of service or enter new one')
+		if not info['description']:
+			errors.append('Description cannot be blank')
+		elif len(info['description']) < 10:
+			errors.append('Description must be at least 10 characters long')
+		if not info['hours']:
+			errors.append('Hours cannot be blank')
+		if not info['phone']:
+			errors.append('Phone number cannot be blank')
+		elif len(info['phone']) != 13:
+			errors.append('Phone number must be in (123)456-7890 format')
+		elif not phone_regex.match(info['phone']):
+			errors.append('Phone number must be in (123)456-7890 format')
+		if not info['email']:
+			errors.append('Email cannot be blank')
+		elif not EMAIL_REGEX.match(info['email']):
+			errors.append('Email format must be valid')
+		if not info['faith_based']:
+			errors.append('Faith Based cannot be blank')
+		if not info['gender_based']:
+			errors.append('Gender Based cannot be blank')
+		if not info['dependent_based']:
+			errors.append('Dependent Based cannot be blank')
+		if not info['req_doc']:
+			errors.append('Required Documents cannot be blank')
+		if not info['street']:
+			errors.append('Street Address cannot be blank')
+		if not info['state']:
+			errors.append('State cannot be blank')
+		elif len(info['state']) != 2:
+			errors.append('Street must be 2 characters long')
+		if not info['city']:
+			errors.append('City cannot be blank')
+		if not info['zip']:
+			errors.append('Zipcode cannot be blank')
+		if errors:
+			return {'errors': errors}
+		# END VALIDATIONS
+
+		if not info['income_restriction']:
+			info['income_restriction'] = 0
+		if not info['suite']:
+			info['suite'] = 0
+		info['state'] = info['state'].upper()
+		info['service_id'] = id
+		try:
+			self.db.query_db('UPDATE service SET name = :name, description = :description, hours = :hours, phone = :phone, email = :email, website = :website, faith_based = :faith_based, gender_based = :gender_based, dependent_based = :dependent_based, income_restriction = :income_restriction, req_doc = :req_doc, documents = :documents, updated_at = Now() WHERE id = :service_id',info)
+		except:
+			errors.append('There was an error, Service name, Phone number, or Email is already in use')
+			return {'errors': errors}
+		# END SERVICE UPDATE
+		# START TYPE UPDATE
 		if (info['type_name_new']):
-			tid = self.db.query_db('INSERT INTO type (name) VALUES (:name)', info)
+			# incase they try to manually add a type that already exists in the DB
+			check = self.db.query_db('SELECT * from type WHERE name = :type_name_new', info)
+			if len(check) == 0: # then they're manually entering a new type and we don't have a problem
+				tid = self.db.query_db('INSERT INTO type (name) VALUES (:type_name_new)', info)
+			else:
+				tid = check[0]['id']
 		else:
-			tid = self.db.query_db('SELECT id FROM type WHERE name = :name', info)
-		update = self.db.query_db('UPDATE service_type SET type_id = :tid, updated_at = Now()', {'tid': tid})
-		return update
+			check = self.db.query_db('SELECT * from type WHERE name = :type_name', info)
+			tid = check[0]['id']
+		update = self.db.query_db('UPDATE service_type SET type_id = :tid, updated_at = Now() WHERE service_id = :id', {'tid': tid, 'id': id})
+		# END TYPE UPDATE
+		# START ADDRESS UPDATE
+		self.db.query_db('UPDATE address SET zip = :zip, street = :street, suite = :suite, state = :state, city = :city, updated_at = NOW() WHERE service_id = :service_id', info)
+		# END ADDRESS UPDATE
+		errors.append('Information successfully updated')
+		return {'errors': errors}
 
 	def result_specific(self, name):
 		if name == 'income_based':
@@ -133,6 +203,7 @@ class Service(Model):
 	def select_all(self):
 		result = self.db.query_db('SELECT a.zip, a.street, a.suite, a.state, a.city, s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, t.name FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id')
 		return result
+
 	def types(self):
 		result = self.db.query_db('SELECT * FROM type')
 		return result

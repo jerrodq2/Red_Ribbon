@@ -45,97 +45,98 @@
     <!-- /END NAV -->
 
 	<div class="container">
+
 		<div class="col-md-12">
 			<h3>Search Results:</h3>
-		</div>
-		{% if result == [] %}
-      <div id="results" class="col-md-8">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <div>
-                <h4><a href="#">Name</a></h4>
-              </div>
-            </div>
-          <div class="panel-body">
-          <div>
-            <div>
-              <h2>No services match this search</h2>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %}
+		</div> <!-- title -->
 
 
-		<!-- start results -->
-		{% for i in result %}
-		<div id="results" class="col-md-8">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
-					<div>
-						<h4><a href="/service/{{i['sid']}}">{{i['s_name']}}</a></h4>
-						<div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734; <a href="#">Rate</a></div>
-						<p>Type: {{i['name']}}</p>
-					</div>
-				</div>
-				<div class="panel-body">
-					<div>
-						<ul class="categories">
-					  	  <li>Categories:</li>
-								{% if i['faith_based'] %}
-							  	<li><a href="/result/faith_based">Faith Based</a></li>
-								{% endif %}
-								{% if i['gender_based'] %}
-							  	<li><a href="/result/gender_based">Gender Specific</a></li>
-								{% endif %}
-								{% if i['req_doc'] %}
-									<li><a href="/result/req_doc">Documents Required</a></li>
-								{% endif %}
-								{% if i['dependent_based'] %}
-									<li><a href="/result/dependent_based">Dependent Based</a></li>
-								{% endif %}
-								{% if i['income_restriction'] != 0%}
-							  	<li><a href="/result/income_based">Income Dependent, Minimum: ${{i['income_restriction']}}</a></li>
-								{% endif %}
-						</ul>
-						{% if i['req_doc'] %}
-							<p>Required Documents: {{ i['documents']}}</p>
-						{% else %}
-							<p>Required Documents: None </p>
-						{% endif %}
-					</div>
-
-					<div>
+		<div class="col-md-8"><!-- start of left column -->
+			{% if result == [] %}
+	      <div id="results" class="col-md-12">
+	          <div class="panel panel-default">
+	            <div class="panel-heading">
+	              <div>
+	                <h4><a href="#">Name</a></h4>
+	              </div>
+	            </div>
+	          <div class="panel-body">
+	          <div>
+	            <div>
+	              <h2>No services match this search</h2>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	    {% endif %}
+			<!-- start results -->
+			{% for i in result %}
+			<div id="results" class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
 						<div>
-							<p>Description: {{i['description']}}</p>
-							{% if i['suite'] == 0 %} 	<!-- will only show suite if it has one-->
-								<p>{{i['street']}}, {{i['city']}} {{i['state']}}, {{i['zip']}}</p>
+							<h4><a href="/service/{{i['sid']}}">{{i['s_name']}}</a></h4>
+							<div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734; <a href="/service/{{i['sid']}}">Rate Service</a></div>
+							<p>Type: {{i['name']}}</p>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div>
+							<ul class="categories">
+						  	  <li>Categories:</li>
+									{% if i['faith_based'] %}
+								  	<li><a href="/result/faith_based">Faith Based</a></li>
+									{% endif %}
+									{% if i['gender_based'] %}
+								  	<li><a href="/result/gender_based">Gender Specific</a></li>
+									{% endif %}
+									{% if i['req_doc'] %}
+										<li><a href="/result/req_doc">Documents Required</a></li>
+									{% endif %}
+									{% if i['dependent_based'] %}
+										<li><a href="/result/dependent_based">Dependent Based</a></li>
+									{% endif %}
+									{% if i['income_restriction'] != 0%}
+								  	<li><a href="/result/income_based">Income Dependent, Minimum: ${{i['income_restriction']}}</a></li>
+									{% endif %}
+							</ul>
+							{% if i['req_doc'] %}
+								<p>Required Documents: {{ i['documents']}}</p>
 							{% else %}
-								<p>{{i['street']}} {{i['suite']}}, {{i['city']}} {{i['state']}}, {{i['zip']}}</p>
+								<p>Required Documents: None </p>
 							{% endif %}
-							{% if i['website'] %}
-								<p>Phone: {{i['phone']}}, Email: {{i['email']}}, Website: <a href="{{i['website']}}">{{i['website']}}</a></p>
-							{% else %}
-								<p>Phone: {{i['phone']}}, Email: {{i['email']}}, Website: N/A</p>
-							{% endif %}
-							{% if session['user'] %}
-								<p><a href="/add/fav/{{i['sid']}}">Add to Favorites</a></p>
-							{% endif %}
+						</div>
+
+						<div>
+							<div>
+								<p>Description: {{i['description']}}</p>
+								{% if i['suite'] == 0 %} 	<!-- will only show suite if it has one-->
+									<p>{{i['street']}}, {{i['city']}} {{i['state']}}, {{i['zip']}}</p>
+								{% else %}
+									<p>{{i['street']}} {{i['suite']}}, {{i['city']}} {{i['state']}}, {{i['zip']}}</p>
+								{% endif %}
+								{% if i['website'] %}
+									<p>Phone: {{i['phone']}}, Email: {{i['email']}}, Website: <a href="http://{{i['website']}}">{{i['website']}}</a></p>
+								{% else %}
+									<p>Phone: {{i['phone']}}, Email: {{i['email']}}, Website: N/A</p>
+								{% endif %}
+								{% if session['user'] %}
+									<p><a href="/add/fav/{{i['sid']}}">Add to Favorites</a></p>
+								{% endif %}
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			{% endfor %}
 		</div>
-		{% endfor %}
 		<!-- end results -->
+		<!-- end of left column -->
 
-		<div class="col-md-1">
-			<!-- space filler -->
-		</div>
 
-		<div class="col-md-3">
+		<div class="col-md-3"><!-- start of right column -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h4>Quick Search:</h4>
@@ -151,7 +152,9 @@
 					</ul>
 				</div>
 			</div>
-		</div>
+		</div><!-- end of right column -->
+
+
 	</div>
 </body>
 </html>
