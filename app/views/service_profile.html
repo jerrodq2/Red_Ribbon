@@ -111,6 +111,15 @@
 									<small><a id="edit_service" href="#">Edit Service</a></small>
 								{% endif %}
 							</h2>
+							{% with messages = get_flashed_messages(category_filter=['update']) %}
+								{% if messages %}
+									<div class="alert alert-danger">
+									{% for message in messages %}
+										<div role="alert">{{ message }}</div>
+									{% endfor %}
+									</div>
+								{% endif %}
+							{% endwith %}
 							<div class="rating"><h4>&#9733;&#9733;&#9733;&#9733;&#9734;</h4></div>
 						</div>
 						<div>
@@ -132,13 +141,18 @@
 							  	<li><a href="/result/income_based">Income Dependent, Minimum: ${{profile['income_restriction']}}</a></li>
 								{% endif %}
 							</ul>
+							{% if profile['req_doc'] %}
+							<p>Required Documents: {{ profile['documents']}}</p>
+						{% else %}
+							<p>Required Documents: None </p>
+						{% endif %}
 						</div>
 
 						<div>
 							<div>
-								<h3>Service Type: {{profile['name']}}</h3>
+								<h4>Service Type: {{profile['name']}}</h4>
 								<h4>Description:</h4>
-								<p>{{profile['description']}}</p>profile
+								<p>{{profile['description']}}</p>
 								{% if profile['suite'] == 0 %} 	<!-- will only show suite if it has one-->
 									<p>{{profile['street']}}, {{profile['city']}} {{profile['state']}}, {{profile['zip']}}</p>
 								{% else %}
@@ -196,7 +210,7 @@
 						<div class="text-center">
 							<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
 							{% if profile['website'] %}
-								<h5>Website: <a href="{{profile['website']}}" target="_blank">{{profile['website']}}</a></h5>
+								<h5>Website: <a href="http://{{profile['website']}}">{{profile['website']}}</a></h5>
 							{% else %}
 								<h5>Website: N/A</h5>
 							{% endif %}
@@ -206,6 +220,8 @@
 								<form class="" action="/add_feedback/service/{{profile['sid']}}" method="post">
 									<label>Summarize issue:</label>
 									<textarea class="form-control" name="comment" rows="8" cols="80"></textarea>
+									<label>Email (optional):</label>
+									<input type="form-control" name="email"></br>
 									<input class="btn btn-default" type="submit" name="" value="Send">
 								</form>
 							</div>
@@ -227,40 +243,160 @@
 		<div id="edit">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<form action="/update/service" method="post">
-						<input type="hidden" name="service_id" value="{{ profile['sid']}}">
-						<div class="form-group">
-							<label>Edit Service Name:</label>
-							<input class="form-control" type="text" name="name" value="{{ profile['name'] }}">
+					<form action="/update/service/{{profile['sid']}}" method="post">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Edit Service Name:</label>
+								<input class="form-control" type="text" name="name" value="{{ profile['s_name'] }}">
+							</div>
+							<div class="form-group">
+								<label>Edit Service Type:</label>
+								<select class="" name="type_name">
+									<option value=""></option>
+									{% for i in types %}
+										{% if i['name'] == profile['name'] %}
+											<option value="{{i['name']}}" selected="selected">{{i['name']}}</option>
+										{% else %}
+											<option value="{{i['name']}}">{{i['name']}}</option>
+										{% endif %}
+									{% endfor %}
+								</select>
+								<p class='col-md-offset-2'><b>Or</b></p>
+								<label>New Type of Service</label>
+								<input class="form-control" type="text" name="type_name_new">
+							</div>
+							<div class="form-group">
+								<label>Edit Service Description:</label>
+								<textarea class="form-control" name="description">{{ profile['description'] }}</textarea>
+							</div>
+							<div class="form-group">
+								<label>Edit Hours the service is available:</label>
+								<input class="form-control" type="text" name="hours" value="{{profile['hours']}}">
+							</div>
+							<div class="form-group">
+								<label>Phone number of the service:</label>
+								<input class="form-control" type="text" name="phone" value="{{profile['phone']}}">
+								<p>Format: (123)456-7890</p>
+							</div>
+						</div> <!--END left side of form -->
+
+
+						<div class="col-md-6">
+							<div class="form-group">
+									<label>Edit Email address of the service:</label>
+									<input class="form-control" type="email" name="email" value="{{profile['email']}}">
+								</div>
+
+							<div class="form-group">
+								<label>Edit Website (optional):</label>
+								<input class="form-control" type="text" name="website" value="{{ profile['website'] }}">
+							</div>
+
+							<div class="form-group">
+									<label>Gender based service:</label>
+									<select class="form-control" name="gender_based">
+										<option value="0">No</option>
+										{% if profile['gender_based'] %}
+											<option value="1" selected="selected">Yes</option>
+										{% else %}
+											<option value="1">Yes</option>
+										{% endif %}
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Faith-based service:</label>
+									<select class="form-control" name="faith_based">
+										<option value="0">No</option>
+										{% if profile['faith_based'] %}
+											<option value="1" selected="selected">Yes</option>
+										{% else %}
+											<option value="1">Yes</option>
+										{% endif %}
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Service for dependants:</label>
+									<select class="form-control" name="dependent_based">
+										<option value="0">No</option>
+										{% if profile['dependent_based'] %}
+											<option value="1" selected="selected">Yes</option>
+										{% else %}
+											<option value="1">Yes</option>
+										{% endif %}
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Service requires docments:</label>
+									<select class="form-control" name="req_doc">
+										<option value="0">No</option>
+										{% if profile['req_doc'] %}
+											<option value="1" selected="selected">Yes</option>
+										{% else %}
+											<option value="1">Yes</option>
+										{% endif %}
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Required Documents (optional)</label>
+									{% if profile['documents'] %}
+										<input class="form-control" type="text" name="documents" value="{{profile['documents']}}">
+									{% else %}
+										<input class="form-control" type="text" name="documents">
+									{% endif %}
+								</div>
+								<div class="form-group">
+									<label>Number of dependants (min)(optional):</label>
+									<input class="form-control" type="text" name="dependent">
+								</div>
+								<div class="form-group">
+									<label>Service annual income restriction (optional):</label>
+									{% if profile['income_restriction'] %}
+										<input class="form-control" type="number" name="income_restriction" value="{{profile['income_restriction']}}">
+									{% else %}
+										<input class="form-control" type="number" name="income_restriction">
+									{% endif %}
+								</div>
+							<div class="form-group">
+								<label>Edit Image URL:</label>
+								<input class="form-control" type="text" name="image_url" value="{{ profile['image_url'] }}">
+							</div>
+						</div> <!--END right side of form -->
+
+						<div id="address">
+							<div class="form-group">
+								<label>Street Address:</label>
+								<input class="form-control" type="text" name="street" value="{{profile['street']}}">
+							</div>
+							<div class="form-group">
+								<label>Suite # (optional):</label>
+								{% if profile['suite'] %}
+									<input class="form-control" type="text" name="suite" value="{{profile['suite']}}">
+								{% else %}
+									<input class="form-control" type="text" name="suite">
+								{% endif %}
+							</div>
+							<div class="form-group">
+								<label>State:</label>
+								<input class="form-control" type="text" name="state" value="{{profile['state']}}">
+							</div>
+							<div class="form-group">
+								<label>City:</label>
+								<input class="form-control" type="text" name="city" value="{{profile['city']}}">
+							</div>
+							<div class="form-group">
+								<label>Zip Code:</label>
+								<input class="form-control" type="text" name="zip" value="{{profile['zip']}}">
+							</div>
 						</div>
-						<div class="form-group">
-							<label>Edit Eligibility Requirements:</label>
-							<select multiple class="form-control">
-							  <option value="{{requirement}}">{{requirement}}</option>
-							  <option value="{{requirement}}">{{requirement}}</option>
-							  <option value="{{requirement}}">{{requirement}}</option>
-							  <option value="{{requirement}}">{{requirement}}</option>
-							</select>
-						</div><div class="form-group">
-							<label>Edit Service Type:</label>
-							<input class="form-control" type="text" name="type" value="{{ profile['type'] }}">
-						</div><div class="form-group">
-							<label>Edit Service Description:</label>
-							<textarea class="form-control" name="description">{{ profile['description'] }}</textarea>
-						</div>
-						<div class="form-group">
-							<label>Edit Website:</label>
-							<input class="form-control" type="text" name="website" value="{{ profile['website'] }}">
-						</div>
-						<div class="form-group">
-							<label>Edit Image URL:</label>
-							<input class="form-control" type="text" name="image_url" value="{{ profile['image_url'] }}">
-						</div>
-						<input type="submit" value="Save Changes">
+						<div id="right">
+								<input class="btn btn-primary" type="submit" value="Save Changes">
+							</div>
 					</form>
 				</div>
 			</div>
-		</div>
+		</div><!-- /END Edit Info -->
+
+
 	</div>
 </body>
 </html>

@@ -44,28 +44,30 @@
 							<table class="table table-hover">
 							  <thead>
 									<tr>
-										<td><b>FEEDBACK INBOX  <span class="badge">2</span></b></td>
+										<td><b>FEEDBACK INBOX  <span class="badge">{{ length }}</span></b></td>
 										<td><a href="/all_feedback"><small>view archive</small></a></td>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td colspan="2">
-											<b>email@gmail.com</b> <small> 01/14/17 - 16:23 </small> <br />
-											asdjkflajsdfkljadslf
-											<form id="feedback" action="/update_feedback/#" method="post">
-												<input class="btn btn-primary" type="submit" value="Archive">
-											</form>
-										</td>
-									</tr>
+									{% if feedback == [] %}
+										<tr>
+											<td colspan='2'>
+												<h4><b>Inbox empty</b></h4>
+											</td>
+										</tr>
+									{% endif %}
+									
 									{% for item in feedback %}
 									<tr>
 										<td colspan="2">
-											<small> {{ item.createdAt }} </small> <br />
+											{% if item.email %}
+												<b>{{item.email}}</b> <small> {{ item.created_at }} </small> <br/>
+											{% else %}
+												<b>Email: N/A</b> <small> {{ item.created_at }} </small> <br/>
+											{% endif %}
 											{{ item.comment }}
-											<form id="feedback" action="/update_feedback/{{ item.id }}" method="post">
-												<input class="btn btn-primary" type="submit" value="Archive">
-											</form>
+											<p>By: {{item.alias}}, <a href="/service/{{item['sid']}}">Go to Service</a></p>
+											<a id="feedback" class="btn btn-primary" href="/deactivate_feedback/{{ item.id }}">Archive</a>
 										</td>
 									</tr>
 									{% endfor %}
@@ -113,9 +115,6 @@
 									<input class="form-control" type="text" name="type_name_new"><!-- REMEBER THIS IS type_name NOT service_name!!!!!!! -->
 								</div>
 
-								<div class="form-group">
-
-								</div>
 
 								<div class="form-group">
 									<label>Description of the service:</label>
@@ -176,8 +175,8 @@
 									</select>
 								</div>
 								<div class="form-group">
-								<label>Required Documents (optional)</label>
-								<input class="form-control" type="text" name="documents">
+									<label>Required Documents (optional)</label>
+									<input class="form-control" type="text" name="documents">
 								</div>
 								<div class="form-group">
 									<label>Number of dependants (min)(optional):</label>

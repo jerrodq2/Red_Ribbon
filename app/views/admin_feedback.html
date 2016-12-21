@@ -29,6 +29,9 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/search"><b>Search Services</b></a></li>
             <li><a href="/result"><b>All Services</b></a></li>
+						{% if session['user'] and session['user']['admin_status'] %}
+							<li><a href="/admin"><b>Admin</b></a></li>
+						{% endif %}
 						<li><a href="/admin">My Dashboard</a></li>
             <li><a href="/logout">Logout</a></li>
           </ul>
@@ -37,6 +40,8 @@
     </nav>
     <!-- /END NAV -->
     <div class="container">
+
+
 			<!-- START FEEDBACK -->
 			<div class="col-md-4 well">
 					<div class="panel-body">
@@ -44,42 +49,39 @@
 							<table class="table table-hover">
 							  <thead>
 									<tr>
-										<td><b>FEEDBACK INBOX  <span class="badge">2</span></b></td>
-
-
+										<td><b>FEEDBACK INBOX <span class="badge">{{length}}</span></b></td>
 										<td><a href="/admin"><small>back to dash</small></a></td>
 									</tr>
 								</thead>
 								<tbody>
-
+									{% if active == [] %}
 										<tr>
-											<td colspan="2">
-												<b>email@gmail.com</b> <small> 01/14/17 - 16:23 </small> <br />
-												asdjkflajsdfkljadslf
-												<form id="feedback" action="/archive_feedback/#" method="post">
-													<input class="btn btn-primary" type="submit" value="Archive">
-												</form>
-
+											<td colspan='2'>
+												<h4><b>Inbox empty</b></h4>
 											</td>
 										</tr>
-										<tr>
-											<td colspan="2">
-												<b>email@gmail.com</b> <small> 01/14/17 - 16:23 </small> <br />
-												asdjkflajsdfkljadslf
-												<form id="feedback" action="/archive_feedback/#" method="post">
-													<input class="btn btn-primary" type="submit" value="Archive">
-												</form>
-
-
-											</td>
-										</tr>
-
+									{% endif %}
+									{% for item in active %}
+									<tr>
+										<td colspan="2">
+											{% if item.email %}
+												<b>{{item.email}}</b> <small> {{ item.created_at }} </small> <br/>
+											{% else %}
+												<b>Email: N/A</b> <small> {{ item.created_at }} </small> <br/>
+											{% endif %}
+											{{ item.comment }}
+											<p>By: {{item.alias}}, <a href="/service/{{item['sid']}}">Go to Service</a></p>
+											<a id="feedback" class="btn btn-primary" href="/all_feedback/deactivate_feedback/{{ item.id }}">Archive</a>
+										</td>
+									</tr>
+									{% endfor %}
 								</tbody>
 							</table>
 					</div>
 				</div>
 			</div>
 			<!-- /END FEEDBACK -->
+
 
 			<div id="archive" class="panel col-md-7 panel-default">
 				<div class="panel-heading">
@@ -89,24 +91,27 @@
 
 					<table class="table table-hover">
 						<tbody>
+							{% if inactive == [] %}
 								<tr>
-									<td>
-										<b>email@gmail.com</b> <small> 01/14/17 - 16:23 </small> <br />
-										asdjkflajsdfkljadslf
-										<form id="feedback" action="/activate_feedback/#" method="post">
-											<input class="btn btn-primary" type="submit" value="Archive">
-										</form>
+									<td colspan='2'>
+										<h4><b>Archive empty</b></h4>
 									</td>
 								</tr>
+							{% endif %}
+							{% for item in inactive %}
 								<tr>
-									<td>
-										<b>email@gmail.com</b> <small> 01/14/17 - 16:23 </small> <br />
-										asdjkflajsdfkljadslf
-										<form id="feedback" action="/activate_feedback/#" method="post">
-											<input class="btn btn-primary" type="submit" value="Archive">
-										</form>
+									<td colspan="2">
+										{% if item.email %}
+											<b>{{item.email}}</b> <small> {{ item.created_at }} </small> <br/>
+										{% else %}
+											<b>Email: N/A</b> <small> {{ item.created_at }} </small> <br/>
+										{% endif %}
+										{{ item.comment }}
+										<p>By: {{item.alias}}, <a href="/service/{{item['sid']}}">Go to Service</a></p>
+										<a id="feedback" class="btn btn-primary" href="/activate_feedback/{{ item.id }}">Archive</a>
 									</td>
 								</tr>
+							{% endfor %}
 						</tbody>
 					</table>
 

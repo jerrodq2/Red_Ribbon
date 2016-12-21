@@ -54,7 +54,7 @@
 						<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
 						<div>
 							<h4><a href="/service/{{rec['sid']}}">{{rec['s_name']}}</a></h4>
-							<div class="rating">{{rec['rating']}}&#9733;&#9733;&#9733;&#9733;&#9734; <a href="#">Rate</a></div>
+							<div class="rating">{{rec['rating']}}&#9733;&#9733;&#9733;&#9733;&#9734; <a href="/service/{{rec['sid']}}">Rate Service</a></div>
 							<p>Type: {{ rec['name'] }}</p>
 						</div>
 					</div>
@@ -94,7 +94,7 @@
 							<p>{{rec['street']}} {{rec['suite']}}, {{rec['city']}} {{rec['state']}}, {{rec['zip']}}</p>
 							{% endif %}
 							{% if rec['website'] %}
-								<p>Phone: {{rec['phone']}}, Email: {{rec['email']}}, Website: <a href="{{rec['website']}}">{{rec['website']}}</a></p>
+								<p>Phone: {{rec['phone']}}, Email: {{rec['email']}}, Website: <a href="http://{{rec['website']}}">{{rec['website']}}</a></p>
 							{% else %}
 								<p>Phone: {{rec['phone']}}, Email: {{rec['email']}}, Website: N/A</p>
 							{% endif %}
@@ -130,7 +130,7 @@
 							<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
 							<div>
 								<h4><a href="/service/{{fav['sid']}}">{{fav['s_name']}}</a></h4>
-								<div class="rating">{{fav['rating']}}&#9733;&#9733;&#9733;&#9733;&#9734; <a href="#">Rate</a></div>
+								<div class="rating">{{fav['rating']}}&#9733;&#9733;&#9733;&#9733;&#9734; <a href="/service/{{fav['sid']}}">Rate Service</a></div>
 								<p>Type: {{fav['name']}}</p>
 							</div>
 						</div>
@@ -170,7 +170,7 @@
 										<p>{{fav['street']}} {{fav['suite']}}, {{fav['city']}} {{fav['state']}}, {{fav['zip']}}</p>
 									{% endif %}
 									{% if fav['website'] %}
-										<p>Phone: {{fav['phone']}}, Email: {{fav['email']}}, Website: <a href="{{fav['website']}}">{{fav['website']}}</a></p>
+										<p>Phone: {{fav['phone']}}, Email: {{fav['email']}}, Website: <a href="http://{{fav['website']}}">{{fav['website']}}</a></p>
 									{% else %}
 										<p>Phone: {{fav['phone']}}, Email: {{fav['email']}}, Website: N/A</p>
 									{% endif %}

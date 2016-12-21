@@ -77,7 +77,7 @@
 					<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
 					<div>
 						<h4><a href="/service/{{i['sid']}}">{{i['s_name']}}</a></h4>
-						<div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734; <a href="#">Rate</a></div>
+						<div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734; <a href="/service/{{i['sid']}}">Rate Service</a></div>
 						<p>Type: {{i['name']}}</p>
 					</div>
 				</div>
@@ -117,7 +117,7 @@
 								<p>{{i['street']}} {{i['suite']}}, {{i['city']}} {{i['state']}}, {{i['zip']}}</p>
 							{% endif %}
 							{% if i['website'] %}
-								<p>Phone: {{i['phone']}}, Email: {{i['email']}}, Website: <a href="{{i['website']}}">{{i['website']}}</a></p>
+								<p>Phone: {{i['phone']}}, Email: {{i['email']}}, Website: <a href="http://{{i['website']}}">{{i['website']}}</a></p>
 							{% else %}
 								<p>Phone: {{i['phone']}}, Email: {{i['email']}}, Website: N/A</p>
 							{% endif %}

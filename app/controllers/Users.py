@@ -69,11 +69,14 @@ class Users(Controller):
 			return redirect('/user')
 		feedback = self.models['Dashboard'].get_feedback_by_active_status()
 		types = self.models['Service'].types()
-		return self.load_view('admin_dash.html', feedback = feedback, types = types)
+		length = len(feedback)
+		return self.load_view('admin_dash.html', feedback = feedback, types = types, length = length)
 
 	def admin_feedback(self):
-		feedback = self.models['Dashboard'].get_feedback_by_inactive_status()
-		return self.load_view('admin_feedback.html', feedback = feedback)
+		inactive = self.models['Dashboard'].get_feedback_by_inactive_status()
+		active = self.models['Dashboard'].get_feedback_by_active_status()
+		length = len(active)
+		return self.load_view('admin_feedback.html', inactive = inactive, active = active)
 
 	def logout(self):
 		session.clear();

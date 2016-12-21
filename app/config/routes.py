@@ -32,11 +32,12 @@ routes['/service/<id>'] = 'Services#profile'
 
 # Admin routes
 routes['/admin'] = 'Users#admin'
-routes['/update/service/<id>'] = 'Services#update_service'
+routes['POST']['/update/service/<id>'] = 'Services#update_service'
 routes['POST']['/add_service'] = 'Services#add_service'
 
 # Feedback routes - ignore until implemented
 routes['/all_feedback'] = 'Users#admin_feedback'
 routes['/deactivate_feedback/<id>'] = 'Services#deactivate_feedback'
+routes['/all_feedback/deactivate_feedback/<id>'] = 'Services#all_feedback_deactivate_feedback'
 routes['/activate_feedback/<id>'] = 'Services#activate_feedback'
 routes['POST']['/add_feedback/service/<id>'] = 'Services#add_feedback'
