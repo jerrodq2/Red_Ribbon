@@ -16,8 +16,11 @@
 	<script>
 		$(document).ready(function() {
 			// initial page setup
-			$('#feedback_input').hide();
-			$('#edit').hide();
+			$('#feedback_input').hide()
+
+			$('#edit').hide()
+
+
 
 			$('#feedback').click(function(event) {
 				$('#feedback_input').show(100);
@@ -26,9 +29,33 @@
 			$('#feedback_input a').click(function(event) {
 				/* TODO: ajax call to send feedback */
 
-				$('#feedback_input').hide(100);
+				$('#feedback_input').hide(100)
 				return false;
 			});
+
+
+			$('#confirm').hide()
+			$('#delete_button').click(function(event){
+				$('#confirm').show(100)
+			})
+			$('#cancel').click(function(event){
+				$('#confirm').hide(100)
+			})
+
+
+			$('.confirm_rating').hide()
+
+			$('.rating_delete').click(function(event){
+				var id = $(this).attr('id')
+				$('#show'+id+'.confirm_rating').show(100)
+
+			})
+
+			$('.cancel_rating').click(function(event){
+				var id = $(this).attr('id')
+				$('#show'+id+'.confirm_rating').hide(100)
+			})
+
 
 			$('#edit_service').click(function(event) {
 				$('#display').hide(100);
@@ -106,12 +133,15 @@
 					<div class="main-info col-md-9">
 						<div>
 							<h2>{{profile['s_name']}}
-								<span class="like">&#9825;</span>
 								{% if session['user'] and session['user']['admin_status'] %}
 									<small><a id="edit_service" href="#">Edit Service</a></small>
-									<a class="btn btn-danger" href="/destroy/service/{{profile['sid']}}">Delete Service</a>
+									<a id="delete_button" class="btn btn-danger" href="#">Delete Service</a>
 								{% endif %}
 							</h2>
+							<div id="confirm">
+								<a class="btn btn-danger" href="/destroy/service/{{profile['sid']}}">Confirm</a>
+								<a id="cancel" class="btn btn-success" href="#">Cancel</a>
+							</div>
 							{% with messages = get_flashed_messages(category_filter=['update']) %}
 								{% if messages %}
 									<div class="alert alert-danger">
@@ -121,7 +151,24 @@
 									</div>
 								{% endif %}
 							{% endwith %}
-							<div class="rating"><h4>&#9733;&#9733;&#9733;&#9733;&#9734;</h4></div>
+							<div class="rating">
+								<h4>
+
+									{% if rating != [] %}
+
+									{% for count in range(1, rating[0]['rating'] + 1) %}
+										&#9733;
+									{% endfor %}
+									{% for count in range(rating[0]['rating'], 5) %}
+										&#9734;
+									{% endfor %}
+
+								{% else %}
+									No ratings yet -
+								{% endif %}
+
+								</h4>
+							</div>
 						</div>
 						<div>
 							<ul class="categories">
@@ -200,10 +247,19 @@
 							<div id="ratings">
 								<h2>Previous Ratings and Comments</h2>
 								{% if comments == [] %}
-									<p>No ratings</p>
+									<p>No ratings or comments</p>
 								{% endif %}
 								{% for i in comments %}
-								<div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+								<div class="rating">
+
+									{% for count in range(1, i['rating'] + 1) %}
+										&#9733;
+									{% endfor %}
+									{% for count in range(i['rating'], 5) %}
+										&#9734;
+									{% endfor %}
+
+								</div>
 								<p>{{i['comment']}}</p>
 								<p>Written by: {{i['alias']}},
 									{% if i['flag'] == 1 %}
@@ -214,7 +270,13 @@
 								</p>
 
 								{% if session['user'] and session['user']['admin_status'] %}
-									<a class="btn btn-danger" href="/destroy/rating/{{i['id']}}/{{profile['sid']}}">Delete Rating</a>
+									<a class="btn btn-danger rating_delete" id="{{i['id']}}">Delete Rating</a>
+
+									<div class="confirm_rating" id="show{{i['id']}}">
+										<a class="btn btn-danger" href="/destroy/rating/{{i['id']}}/{{profile['sid']}}">Confirm</a>
+										<a class="btn btn-success cancel_rating" id="{{i['id']}}">Cancel</a>
+									</div>
+
 								{% endif %}
 								{% endfor %}
 							</div>
