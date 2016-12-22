@@ -29,6 +29,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/search"><b>Search Services</b></a></li>
             <li><a href="/result"><b>All Services</b></a></li>
+						<li><a href="/user">My Dashboard</a></li>
             <li><a href="/logout">Logout</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
@@ -37,46 +38,80 @@
     <!-- /END NAV -->
     <div class="container">
 
+			<div class="col-md-4">
+
 			<!-- START FEEDBACK -->
-			<div class="col-md-4 well">
-					<div class="panel-body">
-						<div id="feedback_box" class="inbox">
+				<div class="col-md-12 well">
+						<div class="panel-body">
+							<div id="feedback_box" class="inbox">
+								<table class="table table-hover">
+								  <thead>
+										<tr>
+											<td><b>FEEDBACK INBOX  <span class="badge">{{ length }}</span></b></td>
+											<td><a href="/all_feedback"><small>view archive</small></a></td>
+										</tr>
+									</thead>
+									<tbody>
+										{% if feedback == [] %}
+											<tr>
+												<td colspan='2'>
+													<h4><b>Inbox empty</b></h4>
+												</td>
+											</tr>
+										{% endif %}
+
+										{% for item in feedback %}
+										<tr>
+											<td colspan="2">
+												{% if item.email %}
+													<b>{{item.email}}</b> <small> {{ item.created_at }} </small> <br/>
+												{% else %}
+													<b>Email: N/A</b> <small> {{ item.created_at }} </small> <br/>
+												{% endif %}
+												{{ item.comment }}
+												<p>By: {{item.alias}}, <a href="/service/{{item['sid']}}">Go to Service</a></p>
+												<a id="feedback" class="btn btn-primary" href="/deactivate_feedback/{{ item.id }}">Archive</a>
+											</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+						</div>
+					</div><!-- /END FEEDBACK -->
+				</div>
+				
+				<div class="col-md-12 well">
+					<div class="panel-body"><!-- START FLAGS -->
+						<div class="inbox" id="feedback_box">
 							<table class="table table-hover">
-							  <thead>
+								<thead>
 									<tr>
-										<td><b>FEEDBACK INBOX  <span class="badge">{{ length }}</span></b></td>
-										<td><a href="/all_feedback"><small>view archive</small></a></td>
+										<td><b>FLAG INBOX <span class="badge">{{flag_length}}</span></b></td>
 									</tr>
 								</thead>
 								<tbody>
-									{% if feedback == [] %}
+									{% if flags == [] %}
 										<tr>
-											<td colspan='2'>
-												<h4><b>Inbox empty</b></h4>
-											</td>
+											<td colspan="2"><h4><b>No Flags</b></h4></td>
 										</tr>
 									{% endif %}
-									
-									{% for item in feedback %}
-									<tr>
-										<td colspan="2">
-											{% if item.email %}
-												<b>{{item.email}}</b> <small> {{ item.created_at }} </small> <br/>
-											{% else %}
-												<b>Email: N/A</b> <small> {{ item.created_at }} </small> <br/>
-											{% endif %}
-											{{ item.comment }}
-											<p>By: {{item.alias}}, <a href="/service/{{item['sid']}}">Go to Service</a></p>
-											<a id="feedback" class="btn btn-primary" href="/deactivate_feedback/{{ item.id }}">Archive</a>
-										</td>
-									</tr>
+									{% for item in flags %}
+										<tr>
+											<td colspan="2">
+												<b>Created by: {{item['alias']}}</b> <small>{{item['created_at']}}</small><br>
+												{{item['comment']}}
+												<p><a href="/service/{{item['sid']}}">Go to Service</a> | <a href="/remove/flag/{{item['id']}}">Remove Flag</a></p>
+												<p><a class="btn btn-danger" href="/destroy/rating/{{item['id']}}">Delete Comment</a></p>
+											</td>
+										</tr>
 									{% endfor %}
 								</tbody>
 							</table>
+						</div>
 					</div>
-				</div>
+
+				</div><!-- /END LEFT COLUMN -->
 			</div>
-			<!-- /END FEEDBACK -->
 			<!-- START SERVICE INFO -->
 
 

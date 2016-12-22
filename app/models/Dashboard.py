@@ -31,6 +31,10 @@ class Dashboard(Model):
 		errors.append('Feedback sent')
 		return {'errors': errors}
 
+	def get_flagged_ratings(self):
+		flags = self.db.query_db("SELECT rating, comment, r.id id, DATE_FORMAT(r.created_at, '%b %d %Y %h: %i %p') created_at, service_id sid, alias FROM rating r JOIN user u ON r.user_id = u.id WHERE flag = 1")
+		return flags
+
 	def get_feedback_by_active_status(self):
 		select = "SELECT f.id id, service_id sid, comment, DATE_FORMAT(f.created_at, '%b %d %Y %h: %i %p') created_at, f.email email, alias FROM feedback f JOIN user u ON f.user_id = u.id WHERE active = 1 ORDER BY f.updated_at DESC"
 		feedback = self.db.query_db(select)
@@ -68,6 +72,14 @@ class Dashboard(Model):
 	def flag_rating(self, id):
 		sid = self.db.query_db('UPDATE rating SET flag = 1 WHERE id = :id', {'id': id})
 		return sid
+
+	def remove_flag(self, id):
+		remove = self.db.query_db("UPDATE rating SET flag = 0 WHERE id = :id", {'id': id})
+		return remove
+
+	def admin_destroy_rating(self, id):
+		delete = self.db.query_db('DELETE FROM rating WHERE id = :id', {'id': id})
+		return delete
 
 	def select_fav(self, id):
 		fav = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM fav f JOIN service s ON f.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id JOIN address a ON a.service_id = s.id WHERE f.user_id = :id', {'id': id})

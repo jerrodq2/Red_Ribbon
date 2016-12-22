@@ -29,16 +29,22 @@ class Services(Controller):
 
 # routes['/deactivate_feedback/<id>'] = 'Services#update_feedback'
 	def deactivate_feedback(self, id):
+		if not 'admin_status' in session['user']:
+			return redirect('/result')
 		self.models['Dashboard'].deactivate_feedback(id)
 		return redirect('/admin')
 
 #routes['/all_feedback/deactivate_feedback/<id>'] = 'Services#all_feedback_deactivate_feedback'
 	def all_feedback_deactivate_feedback(self, id):
+		if not 'admin_status' in session['user']:
+			return redirect('/result')
 		self.models['Dashboard'].deactivate_feedback(id)
 		return redirect('/all_feedback')
 
 # route['/activate_feedback/<id>'] = 'Services#activate_feedback'
 	def activate_feedback(self, id):
+		if not 'admin_status' in session['user']:
+			return redirect('/result')
 		self.models['Dashboard'].activate_feedback(id)
 		return redirect('/all_feedback')
 
@@ -72,11 +78,16 @@ class Services(Controller):
 
 # routes['/flag/rating/<id>/<sid>'] = 'Services#flag_rating'
 	def flag_rating(self, id, sid):
+		if not 'user' in session:
+			flash('You must be logged in to flag', 'comment')
+			return redirect('/service/'+id)
 		self.models['Dashboard'].flag_rating(id)
 		return redirect('/service/'+sid)
 
 # routes['/update/service/<id>'] = 'Services#update_service'
 	def update_service(self, id):
+		if not 'admin_status' in session['user']:
+			return redirect('/service/'+id)
 		update = self.models['Service'].update_service(request.form.copy(), id)
 		for message in update['errors']:
 			flash(message, 'update')
@@ -84,6 +95,8 @@ class Services(Controller):
 
 # route['POST']['/add_service'] = 'Services#add_service'
 	def add_service(self):
+		if not 'admin_status' in session['user']:
+			return redirect('/result')
 		add = self.models['Service'].add_service(request.form.copy())
 		if add['errors']:
 			for message in add['errors']:
@@ -100,10 +113,42 @@ class Services(Controller):
 
 # routes['/add/fav/<id>'] = 'Services#add_fav'
 	def add_fav(self, id):
+		if not 'user' in session:
+			return redirect('/login_reg')
 		self.models['Dashboard'].add_fav(id, session['user']['id'])
 		return redirect('/user')
 
 # routes['/destroy/fav/<id>'] = 'Services#destroy_fav'
 	def destroy_fav(self, id):
+		if not 'user' in session:
+			return redirect('/login_reg')
 		self.models['Dashboard'].destroy_fav(id, session['user']['id'])
 		return redirect('/user')
+
+# routes['/destroy/service/<id>'] = 'Services#destroy'
+	def destroy(self, id):
+		if not 'admin_status' in session['user']:
+			return redirect('/result')
+		self.models['Service'].destroy_service(id)
+		return redirect('/admin')
+
+# route["/destroy/rating/<id>/<sid>"] = 'Services#destroy_rating'
+	def destroy_rating(self, id, sid):
+		if not 'admin_status' in session['user']:
+			return redirect('/result')
+		self.models['Service'].destroy_rating(id)
+		return redirect('/service/'+sid)
+
+# routes["/remove/flag/<id>"] = 'Services#remove_flag'
+	def remove_flag(self, id):
+		if not 'admin_status' in session['user']:
+			return redirect('/result')
+		self.models['Dashboard'].remove_flag(id)
+		return redirect('/admin')
+
+# routes["/destroy/rating/<id>"] = 'Services#destroy_rating_admin'
+	def destroy_rating_admin(self, id):
+		if not 'admin_status' in session['user']:
+			return redirect('/result')
+		self.models['Dashboard'].admin_destroy_rating(id)
+		return redirect('/admin')
