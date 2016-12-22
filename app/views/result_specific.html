@@ -14,6 +14,15 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="/static/css/search_results.css">
 
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("img").error(function(){
+				$(this).unbind('error').attr('src', '../static/images/icon.png')
+			})
+
+		})
+	</script>
+
 </head>
 <body>
 	<!-- START NAVIGATION BAR -->
@@ -76,7 +85,11 @@
 			<div id="results" class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
+						{% if i['img_url'] %}
+							<img class="default_img" src="{{i['img_url']}}" alt="placeholder">
+						{% else %}
+							<img class="default_img" id="def_img" src="../static/images/icon.png" alt="image">
+						{% endif %}
 						<div>
 							<h4><a href="/service/{{i['sid']}}">{{i['s_name']}}</a></h4>
 							<div class="rating">
@@ -112,10 +125,10 @@
 									<li><a href="/result/req_doc">Documents Required</a></li>
 								{% endif %}
 									{% if i['dependent_based'] %}
-										<li><a href="/result/dependent_based">Dependent Based</a></li>
+										<li><a href="/result/dependent_based">Dependent Based (Minimum: {{i['num_of_dependents']}})</a></li>
 									{% endif %}
 								{% if i['income_restriction'] != 0%}
-							  	<li><a href="/result/income_based">Income Dependent, Minimum: ${{i['income_restriction']}}</a></li>
+							  	<li><a href="/result/income_based">Income Dependent (Minimum: ${{i['income_restriction']}})</a></li>
 								{% endif %}
 							</ul>
 							{% if i['req_doc'] %}

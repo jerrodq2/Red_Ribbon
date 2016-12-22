@@ -6,7 +6,7 @@ class Service(Model):
 		super(Service, self).__init__()
 
 	def profile(self, id):
-		profile = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id WHERE s.id = :id', {'id': id})
+		profile = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, img_url, num_of_dependents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id WHERE s.id = :id', {'id': id})
 		return profile[0]
 
 	def comments(self, id):
@@ -68,7 +68,7 @@ class Service(Model):
 			info['suite'] = 0
 		info['state'] = info['state'].upper()
 		# First we add service
-		query = 'INSERT INTO service (name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, req_doc, documents) VALUES (:name, :description, :hours, :phone, :email, :website, :faith_based, :gender_based, :dependent_based, :income_restriction, :req_doc, :documents)'
+		query = 'INSERT INTO service (name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, req_doc, documents, img_url, num_of_dependents) VALUES (:name, :description, :hours, :phone, :email, :website, :faith_based, :gender_based, :dependent_based, :income_restriction, :req_doc, :documents, :img_url, :num_of_dependents)'
 		try:
 			id = self.db.query_db(query, info)
 		except:
@@ -149,7 +149,7 @@ class Service(Model):
 		info['state'] = info['state'].upper()
 		info['service_id'] = id
 		try:
-			self.db.query_db('UPDATE service SET name = :name, description = :description, hours = :hours, phone = :phone, email = :email, website = :website, faith_based = :faith_based, gender_based = :gender_based, dependent_based = :dependent_based, income_restriction = :income_restriction, req_doc = :req_doc, documents = :documents, updated_at = Now() WHERE id = :service_id',info)
+			self.db.query_db('UPDATE service SET name = :name, description = :description, hours = :hours, phone = :phone, email = :email, website = :website, faith_based = :faith_based, gender_based = :gender_based, dependent_based = :dependent_based, income_restriction = :income_restriction, req_doc = :req_doc, documents = :documents, img_url = :img_url, num_of_dependents= :num_of_dependents, updated_at = Now() WHERE id = :service_id',info)
 		except:
 			errors.append('There was an error, Service name, Phone number, or Email is already in use')
 			return {'errors': errors}
@@ -178,7 +178,7 @@ class Service(Model):
 			str = 'income_restriction != 0'
 		else:
 			str = name + ' = 1'
-		result = self.db.query_db("SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, '%b %d %Y %h: %i %p') s_date, req_doc, documents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id WHERE " + str)
+		result = self.db.query_db("SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, '%b %d %Y %h: %i %p') s_date, req_doc, documents, img_url, num_of_dependents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id WHERE " + str)
 		return result
 		# This route is for when they search for services with one elegibility requirement, like in the right box on page 4
 
@@ -187,7 +187,7 @@ class Service(Model):
 			str = ' income_restriction > 0'
 		else:
 			str = ' income_restriction = 0'
-		result = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id WHERE gender_based = :gender_based and faith_based = :faith_based and req_doc = :req_doc and dependent_based = :dependent_based and' + str, info)
+		result = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, img_url, num_of_dependents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id WHERE gender_based = :gender_based and faith_based = :faith_based and req_doc = :req_doc and dependent_based = :dependent_based and' + str, info)
 		return result
 
 	def get_pref_for_dash(self, id):
@@ -197,11 +197,11 @@ class Service(Model):
 	def select_services(self, info):
 		if len(info) < 1:
 			return []
-		result = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id WHERE gender_based = :gender_based and faith_based = :faith_based and dependent_based = :dependent_based and income_restriction = :income_restriction', info)
+		result = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, img_url, num_of_dependents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id WHERE gender_based = :gender_based and faith_based = :faith_based and dependent_based = :dependent_based and income_restriction = :income_restriction', info)
 		return result
 
 	def select_all(self):
-		result = self.db.query_db('SELECT a.zip, a.street, a.suite, a.state, a.city, s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, t.name FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id')
+		result = self.db.query_db('SELECT a.zip, a.street, a.suite, a.state, a.city, s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, img_url, num_of_dependents, t.name FROM address a JOIN service s ON a.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id')
 		return result
 
 	def types(self):

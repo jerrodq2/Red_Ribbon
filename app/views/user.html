@@ -13,6 +13,16 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="/static/css/user.css">
+	<link rel="stylesheet" href="/static/css/search_results.css">
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("img").error(function(){
+				$(this).unbind('error').attr('src', '../static/images/icon.png')
+			})
+
+		})
+	</script>
 
 </head>
 <body>
@@ -51,7 +61,12 @@
 
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
+						{% if rec['img_url'] %}
+							<img class="default_img" src="{{rec['img_url']}}" alt="placeholder">
+						{% else %}
+							<img class="default_img" id="def_img" src="../static/images/icon.png" alt="image">
+						{% endif %}
+
 						<div>
 							<h4><a href="/service/{{rec['sid']}}">{{rec['s_name']}}</a></h4>
 							<div class="rating">
@@ -88,7 +103,7 @@
 									<li><a href="/result/req_doc">Documents Required</a></li>
 								{% endif %}
 								{% if rec['dependent_based'] %}
-									<li><a href="/result/dependent_based">Dependent Based</a></li>
+									<li><a href="/result/dependent_based">Dependent Based (Minimum: {{rec['num_of_dependents']}})</a></li>
 								{% endif %}
 								{% if rec['income_restriction'] %}
 								<li><a href="/result/income_based">Income Dependent, Minimum: ${{rec['income_restriction']}}</a></li>
@@ -143,7 +158,11 @@
 
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
+							{% if fav['img_url'] %}
+								<img class="default_img" src="{{fav['img_url']}}" alt="placeholder">
+							{% else %}
+								<img class="default_img" id="def_img" src="../static/images/icon.png" alt="image">
+							{% endif %}
 							<div>
 								<h4><a href="/service/{{fav['sid']}}">{{fav['s_name']}}</a></h4>
 								<div class="rating">
@@ -180,10 +199,10 @@
 										<li><a href="/result/req_doc">Documents Required</a></li>
 									{% endif %}
 								{% if fav['dependent_based'] %}
-									<li><a href="/result/dependent_based">Dependent Based</a></li>
+									<li><a href="/result/dependent_based">Dependent Based (Minimum: {{fav['num_of_dependents']}})</a></li>
 								{% endif %}
 									{% if fav['income_restriction'] != 0%}
-						  			<li><a href="/result/income_based">Income Dependent, Minimum: ${{fav['income_restriction']}}</a></li>
+						  			<li><a href="/result/income_based">Income Dependent (Minimum: ${{fav['income_restriction']}})</a></li>
 									{% endif %}
 								</ul>
 								{% if fav['req_doc'] %}

@@ -87,5 +87,5 @@ class Dashboard(Model):
 		return delete
 
 	def select_fav(self, id):
-		fav = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM fav f JOIN service s ON f.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id JOIN address a ON a.service_id = s.id WHERE f.user_id = :id', {'id': id})
+		fav = self.db.query_db('SELECT s.id sid, s.name s_name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, DATE_FORMAT(s.updated_at, "%b %d %Y %h: %i %p") s_date, req_doc, documents, img_url, num_of_dependents, t.name, a.zip, a.street, a.suite, a.state, a.city FROM fav f JOIN service s ON f.service_id = s.id JOIN service_type st ON st.service_id = s.id JOIN type t ON t.id = st.type_id JOIN address a ON a.service_id = s.id WHERE f.user_id = :id', {'id': id})
 		return fav
