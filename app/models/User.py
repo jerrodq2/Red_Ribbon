@@ -52,13 +52,18 @@ class User(Model):
         if errors:
             return {'status' : False, 'errors': errors}
         else:
-            query = "INSERT INTO user (alias, email, password, admin_status) VALUES (:alias, :email, :password, :admin_status)"
             data = {
                 'alias': users['alias'],
                 'email' : users['email'],
-                'password' : self.bcrypt.generate_password_hash(users['password']),
-                'admin_status' : 0
+                'password' : self.bcrypt.generate_password_hash(users['password'])
                 }
+            check = self.db.query_db("SELECT * FROM user")
+            if len(check) == 0:
+                data['admin_status'] = 1
+            else:
+                data['admin_status'] = 0
+            query = "INSERT INTO user (alias, email, password, admin_status) VALUES (:alias, :email, :password, :admin_status)"
+
             try:
                 result = self.db.query_db(query, data)
             except Exception as e:
@@ -129,3 +134,36 @@ class User(Model):
             update = "UPDATE preference SET gender_based = :gender, dependent_based = :dependent, faith_based = :faith, income_restriction = :income WHERE user_id = :id"
             self.db.query_db(update, data)
             return {'status' : False}
+
+    def support(self, info):
+        errors = []
+
+        if not info['message']:
+            errors.append('Message cannot be empty')
+        elif len(info['message']) < 10:
+            errors.append('Message must be at least 10 characters long')
+        if info['email']: # email is optional, so the check for format is as well
+            if not EMAIL_REGEX.match(info['email']):
+                errors.append('Email format must be valid')
+        if errors:
+            return {'errors': errors, 'type': 'error'}
+
+        self.db.query_db('INSERT INTO support (message, email) VALUES (:message, :email)', info)
+        errors.append('Your message has been sent, Administrators will review it shortly, thank you for your feedback')
+        return {'errors': errors, 'type': 'success'}
+
+    def active_support(self):
+        support = self.db.query_db("SELECT * FROM support WHERE active = 1")
+        return support
+        
+    def archived_support(self):
+        support = self.db.query_db("SELECT * FROM support WHERE active = 0")
+        return support
+
+    def deactivate_support(self, id):
+        support = self.db.query_db('UPDATE support SET active = 0 WHERE id = :id', {'id': id})
+        return support
+
+    def activate_support(self, id):
+        support = self.db.query_db('UPDATE support SET active = 1 WHERE id = :id', {'id': id})
+        return support

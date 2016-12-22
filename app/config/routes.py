@@ -9,9 +9,11 @@ routes['/logout'] = 'Users#logout'
 routes['POST']['/login'] = 'Users#login'
 routes['POST']['/register'] = 'Users#register'
 
-# User dashboard routes
+# User routes
 routes['/user'] = 'Services#dash'
 routes['/edit_user'] = 'Users#edit'
+routes['/support'] = 'Users#support'
+routes['POST']['/create/support'] = 'Users#create_support'
 routes['POST']['/update_user/pref'] = 'Users#update_pref'
 routes['POST']['/update_user'] = 'Users#update_user'
 
@@ -36,10 +38,14 @@ routes['/destroy/service/<id>'] = 'Services#destroy'
 routes["/destroy/rating/<id>/<sid>"] = 'Services#destroy_rating'
 routes["/destroy/rating/<id>"] = 'Services#destroy_rating_admin'
 routes["/remove/flag/<id>"] = 'Services#remove_flag'
+routes["/deactivate/support/<id>"] = 'Users#deactivate_support'
+routes['/all_support'] = 'Users#all_support'
+routes["/activate/support/<id>"] = 'Users#activate_support'
+routes["/archive/deactivate/support/<id>"] = 'Users#archive_deactivate_support'
 routes['POST']['/update/service/<id>'] = 'Services#update_service'
 routes['POST']['/add_service'] = 'Services#add_service'
 
-# Feedback routes - ignore until implemented
+# Feedback routes
 routes['/all_feedback'] = 'Users#admin_feedback'
 routes['/deactivate_feedback/<id>'] = 'Services#deactivate_feedback'
 routes['/all_feedback/deactivate_feedback/<id>'] = 'Services#all_feedback_deactivate_feedback'

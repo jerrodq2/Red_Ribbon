@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Document</title>
+
+	<link rel="stylesheet" href="../static/css/search_results.css">
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body>
+	<!-- START NAVIGATION BAR -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+					<a class="navbar-brand" href="#"><img src="/static/images/logo.png" height="100px"></a>
+		    </div>
+				<!-- /end Brand -->
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/">Home Page</a></li>
+						<li><a href="/search"><b>Search Services</b></a></li>
+            <li><a href="/result"><b>All Services</b></a></li>
+						{% if session['user'] and session['user']['admin_status'] %}
+							<li><a href="/admin"><b>Admin</b></a></li>
+						{% endif %}
+						<li><a href="/support">Support</a></li>
+						{% if session['user'] %}
+							<li><a href="/user">My Dashboard</a></li>
+							<li><a href="/edit_user">Edit Settings</a></li>
+							<li><a href="/logout">Log Out</a></li>
+						{%else%}
+							<li><a href="/login_reg">Login / Register</a></li>
+						{% endif %}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+    <!-- /END NAV -->
+
+		<div class="container">
+
+			<h1>Support Page</h1>
+
+			{% with messages = get_flashed_messages(category_filter=['success']) %}
+				{% if messages %}
+					<div class="alert alert-success">
+					{% for message in messages %}
+						<div role="alert">{{ message }}</div>
+					{% endfor %}
+					</div>
+				{% endif %}
+			{% endwith %}
+
+			{% with messages = get_flashed_messages(category_filter=['error']) %}
+				{% if messages %}
+					<div class="alert alert-danger">
+					{% for message in messages %}
+						<div role="alert">{{ message }}</div>
+					{% endfor %}
+					</div>
+				{% endif %}
+			{% endwith %}
+
+			<form class="" action="/create/support" method="post">
+				<div class="form-group">
+					<label>Email (optional):</label>
+					<input class="form-control" type="email" name="email">
+				</div>
+				<div class="form-group">
+					<label>Message:</label>
+					<textarea class="form-control" name="message" rows="8" cols="80"></textarea>
+				</div>
+				<input class="btn btn-primary" type="submit" value="Submit">
+			</form>
+
+		</div>
+
+</body>
+</html>

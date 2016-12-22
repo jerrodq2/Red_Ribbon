@@ -52,7 +52,7 @@
 							<table class="table table-hover">
 							  <thead>
 									<tr>
-										<td><b>FEEDBACK INBOX <span class="badge">{{length}}</span></b></td>
+										<td><b>SUPPORT INBOX <span class="badge"></span></b></td>
 										<td><a href="/admin"><small>back to dash</small></a></td>
 									</tr>
 								</thead>
@@ -67,14 +67,13 @@
 									{% for item in active %}
 									<tr>
 										<td colspan="2">
-											{% if item.email %}
-												<b>{{item.email}}</b> <small> {{ item.created_at }} </small> <br/>
-											{% else %}
-												<b>Email: N/A</b> <small> {{ item.created_at }} </small> <br/>
-											{% endif %}
-											{{ item.comment }}
-											<p>By: {{item.alias}}, <a href="/service/{{item['sid']}}">Go to Service</a></p>
-											<a id="feedback" class="btn btn-primary" href="/all_feedback/deactivate_feedback/{{ item.id }}">Archive</a>
+                      {% if item['email'] %}
+      									<p>Email: {{item['email']}}</p>
+      								{% else %}
+      									<p>Email: N/A</p>
+      								{% endif %}
+      								<p>Message: {{item['message']}}</p>
+                      <a class="btn btn-primary" href="/archive/deactivate/support/{{item['id']}}">Archive</a>
 										</td>
 									</tr>
 									{% endfor %}
@@ -88,31 +87,30 @@
 
 			<div id="archive" class="panel col-md-7 panel-default">
 				<div class="panel-heading">
-    			<h3 class="panel-title">Archived Feedback</h3>
+    			<h3 class="panel-title">Archived Support</h3>
 				</div>
 			  <div class="panel-body">
 
 					<table class="table table-hover">
 						<tbody>
-							{% if inactive == [] %}
+							{% if archived == [] %}
 								<tr>
 									<td colspan='2'>
 										<h4><b>Archive empty</b></h4>
 									</td>
 								</tr>
 							{% endif %}
-							{% for item in inactive %}
+							{% for item in archived %}
 								<tr>
-									<td colspan="2">
-										{% if item.email %}
-											<b>{{item.email}}</b> <small> {{ item.created_at }} </small> <br/>
-										{% else %}
-											<b>Email: N/A</b> <small> {{ item.created_at }} </small> <br/>
-										{% endif %}
-										{{ item.comment }}
-										<p>By: {{item.alias}}, <a href="/service/{{item['sid']}}">Go to Service</a></p>
-										<a id="feedback" class="btn btn-primary" href="/activate_feedback/{{ item.id }}">Remove from Archive</a>
-									</td>
+                  <td colspan="2">
+                    {% if item['email'] %}
+                      <p>Email: {{item['email']}}</p>
+                    {% else %}
+                      <p>Email: N/A</p>
+                    {% endif %}
+                    <p>Message: {{item['message']}}</p>
+                    <a class="btn btn-primary" href="/activate/support/{{item['id']}}">Remove from Archive</a>
+                  </td>
 								</tr>
 							{% endfor %}
 						</tbody>
