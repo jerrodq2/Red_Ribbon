@@ -45,9 +45,13 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
+            <li><a href="/">Home Page</a></li>
             <li><a href="/search"><b>Search Services</b></a></li>
             <li><a href="/result"><b>All Services</b></a></li>
+						<li><a href="/admin"><b>Admin</b></a></li>
+						<li><a href="/support">Support</a></li>
 						<li><a href="/user">My Dashboard</a></li>
+						<li><a href="/edit_user">Edit Settings</a></li>
             <li><a href="/logout">Logout</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
@@ -66,7 +70,7 @@
 								  <thead>
 										<tr>
 											<td><b>FEEDBACK INBOX  <span class="badge">{{ length }}</span></b></td>
-											<td><a href="/all_feedback"><small>view archive</small></a></td>
+											<td><a href="/all_feedback"><small>View feedback archive</small></a></td>
 										</tr>
 									</thead>
 									<tbody>
@@ -280,8 +284,48 @@
 						</form>
 					</div>
 
+
+
 					<!-- /END Service Info -->
     </div>
+
+		<div class="col-xs-12 panel panel-success">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<td>
+								<h3><b>Support Inbox <span class="badge">{{support_length}}</span></h3>
+								<a href="/all_support">View support archive</a>
+							</td>
+						</tr>
+						{% if support == [] %}
+						<tr>
+							<td><h4>Inbox empty</h4></td>
+						</tr>
+						{% endif %}
+					</thead>
+					<tbody>
+						{% for i in support %}
+						<tr>
+							<td>
+								{% if i['email'] %}
+									<p>Email: {{i['email']}}</p>
+								{% else %}
+									<p>Email: N/A</p>
+								{% endif %}
+								<p>Message: {{i['message']}}</p>
+								<p>
+									<a class="btn btn-primary" href="/deactivate/support/{{i['id']}}">Archive</a>
+								</p>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+		</div>
+
+	</div>
+
 
 </body>
 </html>

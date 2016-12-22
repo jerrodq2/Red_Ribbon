@@ -115,13 +115,16 @@
             <!-- /end Brand -->
 						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				      <ul class="nav navbar-nav navbar-right">
+								<li><a href="/">Home Page</a></li>
 				        <li><a href="/search"><b>Search Services</b></a></li>
 		            <li><a href="/result"><b>All Services</b></a></li>
 								{% if session['user'] and session['user']['admin_status'] %}
 									<li><a href="/admin"><b>Admin</b></a></li>
 								{% endif %}
+								<li><a href="/support">Support</a></li>
 								{% if session['user'] %}
 									<li><a href="/user">My Dashboard</a></li>
+							<li><a href="/edit_user">Edit Settings</a></li>
 									<li><a href="/logout">Log Out</a></li>
 								{%else%}
 									<li><a href="/login_reg">Login / Register</a></li>

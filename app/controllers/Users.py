@@ -78,7 +78,9 @@ class Users(Controller):
 		length = len(feedback)
 		flags = self.models['Dashboard'].get_flagged_ratings()
 		flag_length = len(flags)
-		return self.load_view('admin_dash.html', feedback = feedback, types = types, length = length, flags = flags, flag_length = flag_length)
+		support = self.models['User'].active_support()
+		support_length = len(support)
+		return self.load_view('admin_dash.html', feedback = feedback, types = types, length = length, flags = flags, flag_length = flag_length, support = support, support_length = support_length)
 
 	def admin_feedback(self):
 		if not 'admin_status' in session['user']:
@@ -91,3 +93,34 @@ class Users(Controller):
 	def logout(self):
 		session.clear();
 		return redirect('/')
+
+# routes['/support'] = 'Users#support'
+	def support(self):
+		return self.load_view('support.html')
+# routes['POST']['/create/support'] = 'Users#create_support'
+	def create_support(self):
+		create = self.models['User'].support(request.form.copy())
+		for message in create['errors']:
+			flash(message, create['type'])
+		return redirect('/support')
+
+# routes['/all_support'] = 'Users#all_support'
+	def all_support(self):
+		active = self.models['User'].active_support()
+		archived = self.models['User'].archived_support()
+		return self.load_view('/archive_support.html', active = active, archived = archived)
+
+# routes["/archive/support/{{i['id']}}"] = 'Users#deactivate_support'
+	def deactivate_support(self, id):
+		self.models['User'].deactivate_support(id)
+		return redirect('/admin')
+
+# routes["/activate/support/<id>"] = 'Users#activate_support'
+	def activate_support(self, id):
+		self.models['User'].activate_support(id)
+		return redirect('/all_support')
+
+# routes["/archive/deactivate/support/<id>"] = 'Users#archive_deactivate_support'
+	def archive_deactivate_support(self, id):
+		self.models['User'].deactivate_support(id)
+		return redirect('/all_support')
