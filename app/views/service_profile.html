@@ -4,7 +4,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Document</title>
-
 	<!-- jquery -->
 	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
@@ -12,6 +11,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="/static/css/search_results.css">
 
 	<script>
 		$(document).ready(function() {
@@ -60,7 +60,13 @@
 			$('#edit_service').click(function(event) {
 				$('#display').hide(100);
 				$('#edit').show(100);
-			});
+			})
+
+			$("img").error(function(){
+				$(this).unbind('error').attr('src', '../static/images/icon.png')
+			})
+
+
 		});
 	</script>
 
@@ -183,10 +189,10 @@
 									<li><a href="/result/req_doc">Documents Required</a></li>
 								{% endif %}
 								{% if profile['dependent_based'] %}
-									<li><a href="/result/dependent_based">Dependent Based</a></li>
+									<li><a href="/result/dependent_based">Dependent Based (Minimum: {{profile['num_of_dependents']}})</a></li>
 								{% endif %}
 								{% if profile['income_restriction'] != 0%}
-							  	<li><a href="/result/income_based">Income Dependent, Minimum: ${{profile['income_restriction']}}</a></li>
+							  	<li><a href="/result/income_based">Income Dependent (Minimum: ${{profile['income_restriction']}})</a></li>
 								{% endif %}
 							</ul>
 							{% if profile['req_doc'] %}
@@ -284,7 +290,12 @@
 					</div>
 					<div class="col-md-3">
 						<div class="text-center">
-							<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
+							{% if profile['img_url'] %}
+								<img class="profile_img" src="{{profile['img_url']}}" alt="placeholder">
+							{% else %}
+								<img class="profile_img" src="../static/images/icon.png" alt="image">
+							{% endif %}
+
 							{% if profile['website'] %}
 								<h5>Website: <a href="http://{{profile['website']}}">{{profile['website']}}</a></h5>
 							{% else %}
@@ -354,15 +365,18 @@
 								<input class="form-control" type="text" name="phone" value="{{profile['phone']}}">
 								<p>Format: (123)456-7890</p>
 							</div>
+							<div class="form-group">
+								<label>Edit Email address of the service:</label>
+								<input class="form-control" type="email" name="email" value="{{profile['email']}}">
+							</div>
 						</div> <!--END left side of form -->
 
 
 						<div class="col-md-6">
 							<div class="form-group">
-									<label>Edit Email address of the service:</label>
-									<input class="form-control" type="email" name="email" value="{{profile['email']}}">
-								</div>
-
+								<label>Image Url (optional):</label>
+								<input class="form-control" type="text" name="img_url" value="{{profile['img_url']}}">
+							</div>
 							<div class="form-group">
 								<label>Edit Website (optional):</label>
 								<input class="form-control" type="text" name="website" value="{{ profile['website'] }}">
@@ -422,7 +436,7 @@
 								</div>
 								<div class="form-group">
 									<label>Number of dependants (min)(optional):</label>
-									<input class="form-control" type="text" name="dependent">
+									<input class="form-control" type="text" name="num_of_dependents" value="{{profile['num_of_dependents']}}">
 								</div>
 								<div class="form-group">
 									<label>Service annual income restriction (optional):</label>

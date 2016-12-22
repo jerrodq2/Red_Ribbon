@@ -30,3 +30,13 @@ ul.categories li{
 	width: 25%;
 	vertical-align: top;
 }
+
+.default_img{
+	width: 63.99px;
+	height: 63.99px;
+}
+.profile_img{
+	margin-top: 20px;
+	width: 140px;
+	height: 110px;
+}

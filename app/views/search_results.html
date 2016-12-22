@@ -5,14 +5,21 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Document</title>
 
+	<link rel="stylesheet" href="../static/css/search_results.css">
 	<!-- jquery -->
 	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="/static/css/search_results.css">
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("img").error(function(){
+				$(this).unbind('error').attr('src', '../static/images/icon.png')
+			})
+
+		})
+	</script>
 
 </head>
 <body>
@@ -74,7 +81,11 @@
 			<div id="results" class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
+						{% if i['img_url'] %}
+							<img class="default_img" src="{{i['img_url']}}" alt="placeholder">
+						{% else %}
+							<img class="default_img" id="def_img" src="../static/images/icon.png" alt="image">
+						{% endif %}
 						<div>
 							<h4><a href="/service/{{i['sid']}}">{{i['s_name']}}</a></h4>
 							<div class="rating">
@@ -109,10 +120,10 @@
 										<li><a href="/result/req_doc">Documents Required</a></li>
 									{% endif %}
 									{% if i['dependent_based'] %}
-										<li><a href="/result/dependent_based">Dependent Based</a></li>
+										<li><a href="/result/dependent_based">Dependent Based (Minimum: {{i['num_of_dependents']}})</a></li>
 									{% endif %}
 									{% if i['income_restriction'] != 0%}
-								  	<li><a href="/result/income_based">Income Dependent, Minimum: ${{i['income_restriction']}}</a></li>
+								  	<li><a href="/result/income_based">Income Dependent (Minimum: ${{i['income_restriction']}})</a></li>
 									{% endif %}
 							</ul>
 							{% if i['req_doc'] %}
