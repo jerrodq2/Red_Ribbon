@@ -59,6 +59,12 @@ class Service(Model):
 			errors.append('City cannot be blank')
 		if not info['zip']:
 			errors.append('Zipcode cannot be blank')
+		elif len(info['zip']) < 5:
+			errors.append('Zipcode must be at least 5 characters long')
+		try:
+			val = int(info['zip'])
+		except:
+			errors.append('Zipcode must be a number')
 		if errors:
 			return {'errors': errors}
 
@@ -66,6 +72,8 @@ class Service(Model):
 			info['income_restriction'] = 0
 		if not info['suite']:
 			info['suite'] = 0
+		if not info['num_of_dependents']:
+			info['num_of_dependents'] = 0
 		info['state'] = info['state'].upper()
 		# First we add service
 		query = 'INSERT INTO service (name, description, hours, phone, email, website, faith_based, gender_based, dependent_based, income_restriction, req_doc, documents, img_url, num_of_dependents) VALUES (:name, :description, :hours, :phone, :email, :website, :faith_based, :gender_based, :dependent_based, :income_restriction, :req_doc, :documents, :img_url, :num_of_dependents)'
@@ -138,6 +146,12 @@ class Service(Model):
 			errors.append('City cannot be blank')
 		if not info['zip']:
 			errors.append('Zipcode cannot be blank')
+		elif len(info['zip']) < 5:
+			errors.append('Zipcode must be at least 5 characters long')
+		try:
+			val = int(info['zip'])
+		except:
+			errors.append('Zipcode must be a number')
 		if errors:
 			return {'errors': errors}
 		# END VALIDATIONS
@@ -146,6 +160,8 @@ class Service(Model):
 			info['income_restriction'] = 0
 		if not info['suite']:
 			info['suite'] = 0
+		if not info['num_of_dependents']:
+			info['num_of_dependents'] = 0
 		info['state'] = info['state'].upper()
 		info['service_id'] = id
 		try:

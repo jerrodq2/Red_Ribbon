@@ -361,7 +361,7 @@
 								<input class="form-control" type="text" name="hours" value="{{profile['hours']}}">
 							</div>
 							<div class="form-group">
-								<label>Phone number of the service:</label>
+								<label>Edit Phone number of the service:</label>
 								<input class="form-control" type="text" name="phone" value="{{profile['phone']}}">
 								<p>Format: (123)456-7890</p>
 							</div>
@@ -374,7 +374,7 @@
 
 						<div class="col-md-6">
 							<div class="form-group">
-								<label>Image Url (optional):</label>
+								<label>Edit Image Url (optional):</label>
 								<input class="form-control" type="text" name="img_url" value="{{profile['img_url']}}">
 							</div>
 							<div class="form-group">
@@ -416,7 +416,7 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label>Service requires docments:</label>
+									<label>Edit Service requires docments:</label>
 									<select class="form-control" name="req_doc">
 										<option value="0">No</option>
 										{% if profile['req_doc'] %}
@@ -427,7 +427,7 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label>Required Documents (optional)</label>
+									<label>Edit Required Documents (optional)</label>
 									{% if profile['documents'] %}
 										<input class="form-control" type="text" name="documents" value="{{profile['documents']}}">
 									{% else %}
@@ -435,30 +435,30 @@
 									{% endif %}
 								</div>
 								<div class="form-group">
-									<label>Number of dependants (min)(optional):</label>
-									<input class="form-control" type="text" name="num_of_dependents" value="{{profile['num_of_dependents']}}">
+									<label>Edit Number of dependants (min)(optional):</label>
+									{% if profile['num_of_dependents'] %}
+										<input class="form-control" type="number" name="num_of_dependents" value="{{profile['num_of_dependents']}}">
+									{% else %}
+										<input class="form-control" type="number" name="num_of_dependents">
+									{% endif %}
 								</div>
 								<div class="form-group">
-									<label>Service annual income restriction (optional):</label>
+									<label>Edit Service annual income restriction (optional):</label>
 									{% if profile['income_restriction'] %}
 										<input class="form-control" type="number" name="income_restriction" value="{{profile['income_restriction']}}">
 									{% else %}
 										<input class="form-control" type="number" name="income_restriction">
 									{% endif %}
 								</div>
-							<div class="form-group">
-								<label>Edit Image URL:</label>
-								<input class="form-control" type="text" name="image_url" value="{{ profile['image_url'] }}">
-							</div>
 						</div> <!--END right side of form -->
 
 						<div id="address">
 							<div class="form-group">
-								<label>Street Address:</label>
+								<label>Edit Street Address:</label>
 								<input class="form-control" type="text" name="street" value="{{profile['street']}}">
 							</div>
 							<div class="form-group">
-								<label>Suite # (optional):</label>
+								<label>Edit Suite # (optional):</label>
 								{% if profile['suite'] %}
 									<input class="form-control" type="text" name="suite" value="{{profile['suite']}}">
 								{% else %}
@@ -466,16 +466,16 @@
 								{% endif %}
 							</div>
 							<div class="form-group">
-								<label>State:</label>
+								<label>Edit State:</label>
 								<input class="form-control" type="text" name="state" value="{{profile['state']}}">
 							</div>
 							<div class="form-group">
-								<label>City:</label>
+								<label>Edit City:</label>
 								<input class="form-control" type="text" name="city" value="{{profile['city']}}">
 							</div>
 							<div class="form-group">
-								<label>Zip Code:</label>
-								<input class="form-control" type="text" name="zip" value="{{profile['zip']}}">
+								<label>Edit Zip Code:</label>
+								<input class="form-control" type="number" name="zip" value="{{profile['zip']}}">
 							</div>
 						</div>
 						<div id="right">
