@@ -63,6 +63,11 @@ class Dashboard(Model):
 			errors.append('Comment must be at least 10 characters long')
 		if errors:
 			return {'errors': errors}
+
+		check = self.db.query_db('SELECT * FROM rating WHERE user_id = :uid', {'uid': uid})
+		if len(check) > 0:
+			errors.append('You cannot create more than one rating and comment per service')
+			return {'errors': errors}
 		query = ('INSERT INTO rating (rating, comment, user_id, service_id, active, flag) VALUES (:rating, :comment, :uid, :id, 1, 0)')
 		info['uid'] = uid
 		info['id'] = id

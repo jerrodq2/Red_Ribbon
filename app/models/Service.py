@@ -10,7 +10,7 @@ class Service(Model):
 		return profile[0]
 
 	def comments(self, id):
-		comments = self.db.query_db('SELECT rating, comment, flag, r.id id, alias FROM rating r JOIN user u ON r.user_id = u.id WHERE service_id = :id', {'id': id})
+		comments = self.db.query_db('SELECT rating, comment, r.user_id uid, flag, r.id id, alias FROM rating r JOIN user u ON r.user_id = u.id WHERE service_id = :id', {'id': id})
 		return comments
 
 	def add_service(self, info):
@@ -221,6 +221,12 @@ class Service(Model):
 	def destroy_rating(self, id):
 		delete = self.db.query_db('DELETE FROM rating WHERE id = :id', {'id': id})
 		return delete
+
+	def check_rating(self, id, uid):
+		check = self.db.query_db('SELECT user_id FROM rating WHERE id = :id', {'id': id})
+		if check[0]['user_id'] == uid:
+			return True
+		return False
 
 	def ratings(self):
 		ratings = self.db.query_db("SELECT s.id sid, ROUND(AVG(rating)) rating FROM rating r JOIN service s ON r.service_id = s.id GROUP BY s.id")
