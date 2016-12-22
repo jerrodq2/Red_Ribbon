@@ -171,8 +171,13 @@ class Services(Controller):
 
 # route["/destroy/rating/<id>/<sid>"] = 'Services#destroy_rating'
 	def destroy_rating(self, id, sid):
-		if not 'admin_status' in session['user']:
+		if not 'admin_status' in session['user'] and not 'user' in session:
 			return redirect('/result')
+		if not 'admin_status' in session['user']: # if you're an admin, you can delete, if not, we need to make sure that the user logged in is the creator of the comment/rating
+			check = self.models['Service'].check_rating(id, session['user']['id'])
+			if not check:
+				return redirect('/result')
+				
 		self.models['Service'].destroy_rating(id)
 		return redirect('/service/'+sid)
 

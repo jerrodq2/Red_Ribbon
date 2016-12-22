@@ -269,7 +269,7 @@
 									{% endif %}
 								</p>
 
-								{% if session['user'] and session['user']['admin_status'] %}
+								{% if (session['user'] and session['user']['admin_status']) or (session['user'] and session['user']['id'] == i['uid']) %}
 									<a class="btn btn-danger rating_delete" id="{{i['id']}}">Delete Rating</a>
 
 									<div class="confirm_rating" id="show{{i['id']}}">
