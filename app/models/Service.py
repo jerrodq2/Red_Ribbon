@@ -221,3 +221,11 @@ class Service(Model):
 	def destroy_rating(self, id):
 		delete = self.db.query_db('DELETE FROM rating WHERE id = :id', {'id': id})
 		return delete
+
+	def ratings(self):
+		ratings = self.db.query_db("SELECT s.id sid, ROUND(AVG(rating)) rating FROM rating r JOIN service s ON r.service_id = s.id GROUP BY s.id")
+		return ratings
+
+	def single_rating(self, id):
+		rating = self.db.query_db("SELECT ROUND(AVG(rating)) rating FROM rating r WHERE r.service_id = :id GROUP BY r.service_id ", {'id': id})
+		return rating

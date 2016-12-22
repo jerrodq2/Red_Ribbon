@@ -54,7 +54,23 @@
 						<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
 						<div>
 							<h4><a href="/service/{{rec['sid']}}">{{rec['s_name']}}</a></h4>
-							<div class="rating">{{rec['rating']}}&#9733;&#9733;&#9733;&#9733;&#9734; <a href="/service/{{rec['sid']}}">Rate Service</a></div>
+							<div class="rating">
+
+								{% if rec['rating'] %}
+
+									{% for count in range(1, rec['rating'] + 1) %}
+										&#9733;
+									{% endfor %}
+									{% for count in range(rec['rating'], 5) %}
+										&#9734;
+									{% endfor %}
+
+								{% else %}
+									No ratings yet -
+								{% endif %}
+
+								<a href="/service/{{rec['sid']}}">Rate Service</a>
+							</div>
 							<p>Type: {{ rec['name'] }}</p>
 						</div>
 					</div>
@@ -130,7 +146,23 @@
 							<img src="https://www.riddle.com/assets/img/img-icon.png" alt="placeholder">
 							<div>
 								<h4><a href="/service/{{fav['sid']}}">{{fav['s_name']}}</a></h4>
-								<div class="rating">{{fav['rating']}}&#9733;&#9733;&#9733;&#9733;&#9734; <a href="/service/{{fav['sid']}}">Rate Service</a></div>
+								<div class="rating">
+
+									{% if fav['rating'] %}
+
+										{% for count in range(1, fav['rating'] + 1) %}
+											&#9733;
+										{% endfor %}
+										{% for count in range(fav['rating'], 5) %}
+											&#9734;
+										{% endfor %}
+
+									{% else %}
+										No ratings yet -
+									{% endif %}
+
+									<a href="/service/{{fav['sid']}}">Rate Service</a>
+								</div>
 								<p>Type: {{fav['name']}}</p>
 							</div>
 						</div>

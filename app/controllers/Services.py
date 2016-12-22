@@ -15,16 +15,40 @@ class Services(Controller):
 # routes['/results/<name>'] = 'Services#result_specific'
 	def result_specific(self, name):
 		result = self.models['Service'].result_specific(name)
+		ratings = self.models['Service'].ratings()
+		def find_rate(id):
+			for i in ratings:
+				if i['sid'] == id:
+					return i['rating']
+		for i in result:
+			rate = find_rate(i['sid'])
+			i['rating'] = rate
 		return self.load_view('result_specific.html', result = result)
 
 # routes['/result'] = 'Services#result' **********
 	def result(self):
 		select = self.models['Service'].select_all()
+		ratings = self.models['Service'].ratings()
+		def find_rate(id):
+			for i in ratings:
+				if i['sid'] == id:
+					return i['rating']
+		for i in select:
+			rate = find_rate(i['sid'])
+			i['rating'] = rate
 		return self.load_view('search_results.html', result = select)
 
 # routes['/results'] = 'Services#multiple_result_specific'
 	def multiple_result_specific(self):
 		result = self.models['Service'].multiple_result_specific(request.form.copy())
+		ratings = self.models['Service'].ratings()
+		def find_rate(id):
+			for i in ratings:
+				if i['sid'] == id:
+					return i['rating']
+		for i in result:
+			rate = find_rate(i['sid'])
+			i['rating'] = rate
 		return self.load_view('search_results.html', result = result)
 
 # routes['/deactivate_feedback/<id>'] = 'Services#update_feedback'
@@ -64,7 +88,8 @@ class Services(Controller):
 		profile = self.models['Service'].profile(id)
 		comments = self.models['Service'].comments(id)
 		types = self.models['Service'].types()
-		return self.load_view('service_profile.html', profile = profile, comments = comments, types = types)
+		rating = self.models['Service'].single_rating(id)
+		return self.load_view('service_profile.html', profile = profile, comments = comments, types = types, rating = rating)
 
 # routes['POST']['/add_rating/service/<id>'] = 'Services#add_rating'
 	def add_rating(self, id):
@@ -109,6 +134,18 @@ class Services(Controller):
 		pref = self.models['Service'].get_pref_for_dash(session['user']['id'])
 		result = self.models['Service'].select_services(pref)
 		fav = self.models['Dashboard'].select_fav(session['user']['id'])
+		ratings = self.models['Service'].ratings()
+		def find_rate(id):
+			for i in ratings:
+				if i['sid'] == id:
+					return i['rating']
+
+		for i in result:
+			rate = find_rate(i['sid'])
+			i['rating'] = rate
+		for i in fav:
+			rate = find_rate(i['sid'])
+			i['rating'] = rate
 		return self.load_view('user.html', result = result, favs = fav)
 
 # routes['/add/fav/<id>'] = 'Services#add_fav'
