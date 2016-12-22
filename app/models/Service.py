@@ -10,7 +10,7 @@ class Service(Model):
 		return profile[0]
 
 	def comments(self, id):
-		comments = self.db.query_db('SELECT rating, comment, r.id id, alias FROM rating r JOIN user u ON r.user_id = u.id WHERE service_id = :id', {'id': id})
+		comments = self.db.query_db('SELECT rating, comment, flag, r.id id, alias FROM rating r JOIN user u ON r.user_id = u.id WHERE service_id = :id', {'id': id})
 		return comments
 
 	def add_service(self, info):
@@ -207,3 +207,17 @@ class Service(Model):
 	def types(self):
 		result = self.db.query_db('SELECT * FROM type')
 		return result
+
+	def destroy_service(self, id):
+		data = {'id': id}
+		self.db.query_db('DELETE FROM address WHERE service_id = :id', data)
+		self.db.query_db('DELETE FROM service_type WHERE service_id = :id', data)
+		self.db.query_db('DELETE FROM rating WHERE service_id = :id', data)
+		self.db.query_db('DELETE FROM feedback WHERE service_id = :id', data)
+		self.db.query_db('DELETE FROM fav WHERE service_id = :id', data)
+		final = self.db.query_db('DELETE FROM service WHERE id = :id', data)
+		return final
+
+	def destroy_rating(self, id):
+		delete = self.db.query_db('DELETE FROM rating WHERE id = :id', {'id': id})
+		return delete

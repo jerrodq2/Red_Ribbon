@@ -32,6 +32,10 @@ routes['/service/<id>'] = 'Services#profile'
 
 # Admin routes
 routes['/admin'] = 'Users#admin'
+routes['/destroy/service/<id>'] = 'Services#destroy'
+routes["/destroy/rating/<id>/<sid>"] = 'Services#destroy_rating'
+routes["/destroy/rating/<id>"] = 'Services#destroy_rating_admin'
+routes["/remove/flag/<id>"] = 'Services#remove_flag'
 routes['POST']['/update/service/<id>'] = 'Services#update_service'
 routes['POST']['/add_service'] = 'Services#add_service'
 

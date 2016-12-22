@@ -109,6 +109,7 @@
 								<span class="like">&#9825;</span>
 								{% if session['user'] and session['user']['admin_status'] %}
 									<small><a id="edit_service" href="#">Edit Service</a></small>
+									<a class="btn btn-danger" href="/destroy/service/{{profile['sid']}}">Delete Service</a>
 								{% endif %}
 							</h2>
 							{% with messages = get_flashed_messages(category_filter=['update']) %}
@@ -198,10 +199,23 @@
 
 							<div id="ratings">
 								<h2>Previous Ratings and Comments</h2>
+								{% if comments == [] %}
+									<p>No ratings</p>
+								{% endif %}
 								{% for i in comments %}
 								<div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
 								<p>{{i['comment']}}</p>
-								<p>Written by: {{i['alias']}}, <a href="/flag/rating/{{i['id']}}/{{profile['sid']}}">Flag innapropriate comment</a></p>
+								<p>Written by: {{i['alias']}},
+									{% if i['flag'] == 1 %}
+										Comment has been flagged and reported to admin
+									{% else %}
+										<a href="/flag/rating/{{i['id']}}/{{profile['sid']}}">Flag innapropriate comment</a>
+									{% endif %}
+								</p>
+
+								{% if session['user'] and session['user']['admin_status'] %}
+									<a class="btn btn-danger" href="/destroy/rating/{{i['id']}}/{{profile['sid']}}">Delete Rating</a>
+								{% endif %}
 								{% endfor %}
 							</div>
 						</div>

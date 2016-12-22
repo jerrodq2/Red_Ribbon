@@ -40,6 +40,8 @@ class Users(Controller):
 			return redirect('/login_reg')
 
 	def edit(self):
+		if not 'user' in session:
+			return redirect('/login_reg')
 		preferences = self.models['User'].get_preferences_by_id(session['user']['id'])
 		if preferences['status']:
 			return self.load_view('edit_user.html', preferences = preferences['pref'])
@@ -47,6 +49,8 @@ class Users(Controller):
 			return self.load_view('edit_user.html', preferences = {}) #so the html doesn't error out looking for the preferences dictionary
 
 	def update_user(self):
+		if not 'user' in session:
+			return redirect('/login_reg')
 		result = self.models['User'].update_user_by_id(session['user']['id'], request.form.copy())
 		if result['status']:
 			session['user']['email'] = result['result']['email']
@@ -57,6 +61,8 @@ class Users(Controller):
 		return redirect('/edit_user')
 
 	def update_pref(self):
+		if not 'user' in session:
+			return redirect('/login_reg')
 		result = self.models['User'].update_prefrences_by_id(session['user']['id'], request.form.copy())
 		if result['status'] == True:
 			return redirect('/user')
@@ -70,9 +76,13 @@ class Users(Controller):
 		feedback = self.models['Dashboard'].get_feedback_by_active_status()
 		types = self.models['Service'].types()
 		length = len(feedback)
-		return self.load_view('admin_dash.html', feedback = feedback, types = types, length = length)
+		flags = self.models['Dashboard'].get_flagged_ratings()
+		flag_length = len(flags)
+		return self.load_view('admin_dash.html', feedback = feedback, types = types, length = length, flags = flags, flag_length = flag_length)
 
 	def admin_feedback(self):
+		if not 'admin_status' in session['user']:
+			return redirect('/result')
 		inactive = self.models['Dashboard'].get_feedback_by_inactive_status()
 		active = self.models['Dashboard'].get_feedback_by_active_status()
 		length = len(active)
