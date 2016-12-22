@@ -177,7 +177,7 @@ class Services(Controller):
 			check = self.models['Service'].check_rating(id, session['user']['id'])
 			if not check:
 				return redirect('/result')
-				
+
 		self.models['Service'].destroy_rating(id)
 		return redirect('/service/'+sid)
 
