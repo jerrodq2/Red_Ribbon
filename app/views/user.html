@@ -56,101 +56,121 @@
     <!-- /END NAV -->
 
 	<div class="container">
-		<div class="col-md-12">
-			<h3>Recommended: <small>based on your preferences <i><sub>(<a href="/edit_user">edit settings</a>)</sub></i></small></h3>
-		</div>
-		<!-- start results -->
-		<div id="results" class="col-md-6">
 
-				{% for rec in result %}
 
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						{% if rec['img_url'] %}
-							<img class="default_img" src="{{rec['img_url']}}" alt="placeholder">
-						{% else %}
-							<img class="default_img" id="def_img" src="../static/images/icon.png" alt="image">
-						{% endif %}
-
-						<div>
-							<h4><a href="/service/{{rec['sid']}}">{{rec['s_name']}}</a></h4>
-							<div class="rating">
-
-								{% if rec['rating'] %}
-
-									{% for count in range(1, rec['rating'] + 1) %}
-										&#9733;
-									{% endfor %}
-									{% for count in range(rec['rating'], 5) %}
-										&#9734;
-									{% endfor %}
-
-								{% else %}
-									No ratings yet -
-								{% endif %}
-
-								<a href="/service/{{rec['sid']}}">Rate Service</a>
-							</div>
-							<p>Type: {{ rec['name'] }}</p>
-						</div>
-					</div>
-					<div class="panel-body">
-						<div>
-							<ul class="categories">
-								<li>Categories:</li>
-								{% if rec['faith_based']%}
-								<li><a href="/result/faith_based">Faith Based</a></li>
-								{% endif %}
-								{% if rec['gender_based']%}
-								<li><a href="/result/gender_based">Gender Specific</a></li>
-								{% endif %}
-								{% if rec['req_doc'] %}
-									<li><a href="/result/req_doc">Documents Required</a></li>
-								{% endif %}
-								{% if rec['dependent_based'] %}
-									<li><a href="/result/dependent_based">Dependent Based (Minimum: {{rec['num_of_dependents']}})</a></li>
-								{% endif %}
-								{% if rec['income_restriction'] %}
-								<li><a href="/result/income_based">Income Dependent, Minimum: ${{rec['income_restriction']}}</a></li>
-								{% endif %}
-							</ul>
-							{% if rec['req_doc'] %}
-								<p>Required Documents: {{ rec['documents']}}</p>
-							{% else %}
-								<p>Required Documents: None </p>
-							{% endif %}
-						</div>
-
-						<div>
-							<div>
-								<p>{{rec['description']}}</p>
-								{% if rec['suite'] == 0 %} 	<!-- will only show suite if it has one-->
-							<p>{{rec['street']}}, {{rec['city']}} {{rec['state']}}, {{rec['zip']}}</p>
-							{% else %}
-							<p>{{rec['street']}} {{rec['suite']}}, {{rec['city']}} {{rec['state']}}, {{rec['zip']}}</p>
-							{% endif %}
-							{% if rec['website'] %}
-								<p>Phone: {{rec['phone']}}, Email: {{rec['email']}}, Website: <a href="http://{{rec['website']}}">{{rec['website']}}</a></p>
-							{% else %}
-								<p>Phone: {{rec['phone']}}, Email: {{rec['email']}}, Website: N/A</p>
-							{% endif %}
-							{% if session['user'] %}
-								<p><a href="/add/fav/{{rec['sid']}}">Add to Favorites</a></p>
-							{% endif %}
-							</div>
-						</div>
-					</div>
+		<div class="col-md-6"><!-- START OF RECOMMENDED COLUMN -->
+			<div id="results"class="panel panel-default">
+				<div class="panel-heading ">
+					<h3>Recommended: <small>based on your preferences <i><sub>(<a href="/edit_user">edit settings</a>)</sub></i></small></h3>
 				</div>
-			{% endfor %}
 
+				<div class="panel-body">
 
+					{% if pref == [] %}<!-- NO PREFERENCES FOR THIS USER -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2>No Current Preferences</h2>
+						</div>
+						<div class="panel-body">
+							<a href="/edit_user">Click here to create your preferences</a>
+						</div>
+					</div>
+
+					{% elif result == [] %}	<!-- NO SERVICES MATCH THE PREFERENCES -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3>No Services Match Your Current Preferences</h3>
+						</div>
+						<div class="panel-body">
+							<p><a href="/edit_user">Click here to edit your preferences</a></p>
+							<p><a href="/support">Click here to contact the admin</a></p>
+							<p><a href="/recommend/service">Click here to recommend a service to admin</a></p>
+							<p><a href="/result">Click here to browse all services</a></p>
+						</div>
+					</div>
+					{% endif %}
+
+						{% for rec in result %}
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								{% if rec['img_url'] %}
+									<img class="default_img" src="{{rec['img_url']}}" alt="placeholder">
+								{% else %}
+									<img class="default_img" id="def_img" src="../static/images/icon.png" alt="image">
+								{% endif %}
+								<div>
+									<h4><a href="/service/{{rec['sid']}}">{{rec['s_name']}}</a></h4>
+									<div class="rating">
+										{% if rec['rating'] %}
+
+											{% for count in range(1, rec['rating'] + 1) %}
+												&#9733;
+											{% endfor %}
+											{% for count in range(rec['rating'], 5) %}
+												&#9734;
+											{% endfor %}
+
+										{% else %}
+											No ratings yet -
+										{% endif %}
+										<a href="/service/{{rec['sid']}}">Rate Service</a>
+									</div>
+									<p>Type: {{ rec['name'] }}</p>
+								</div>
+							</div>
+							<div class="panel-body">
+								<div>
+									<ul class="categories">
+										<li>Categories:</li>
+										{% if rec['faith_based']%}
+										<li><a href="/result/faith_based">Faith Based</a></li>
+										{% endif %}
+										{% if rec['gender_based']%}
+										<li><a href="/result/gender_based">Gender Specific</a></li>
+										{% endif %}
+										{% if rec['req_doc'] %}
+											<li><a href="/result/req_doc">Documents Required</a></li>
+										{% endif %}
+										{% if rec['dependent_based'] %}
+											<li><a href="/result/dependent_based">Dependent Based (Minimum: {{rec['num_of_dependents']}})</a></li>
+										{% endif %}
+										{% if rec['income_restriction'] %}
+										<li><a href="/result/income_based">Income Dependent, Minimum: ${{rec['income_restriction']}}</a></li>
+										{% endif %}
+									</ul>
+									{% if rec['req_doc'] %}
+										<p>Required Documents: {{ rec['documents']}}</p>
+									{% else %}
+										<p>Required Documents: None </p>
+									{% endif %}
+								</div>
+
+								<div>
+									<div>
+										<p>{{rec['description']}}</p>
+										{% if rec['suite'] == 0 %} 	<!-- will only show suite if it has one-->
+									<p>{{rec['street']}}, {{rec['city']}} {{rec['state']}}, {{rec['zip']}}</p>
+									{% else %}
+									<p>{{rec['street']}} {{rec['suite']}}, {{rec['city']}} {{rec['state']}}, {{rec['zip']}}</p>
+									{% endif %}
+									{% if rec['website'] %}
+										<p>Phone: {{rec['phone']}}, Email: {{rec['email']}}, Website: <a href="http://{{rec['website']}}">{{rec['website']}}</a></p>
+									{% else %}
+										<p>Phone: {{rec['phone']}}, Email: {{rec['email']}}, Website: N/A</p>
+									{% endif %}
+									{% if session['user'] %}
+										<p><a href="/add/fav/{{rec['sid']}}">Add to Favorites</a></p>
+									{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
 			</div>
-		</div>
-		<!-- end results -->
+		</div><!-- end results/recommended -->
 
-		<div class="col-md-1">
-			<!-- space filler -->
-		</div>
+
 
 		<div class="col-md-6">
 			<div class="panel panel-success">
@@ -158,6 +178,17 @@
 					<h4>My Favorites</h4>
 				</div>
 				<div class="panel-body" id="favs">
+
+					{% if favs == [] %}<!-- NO FAVORITES YET -->
+					<div class="panel panel-default">
+					<div class="panel-heading">
+						<h2>No Current Favorites</h2>
+					</div>
+					<div class="panel-body">
+						<a href="/result">Click here to browse all services</a>
+					</div>
+				</div>
+					{% endif %}
 
 					{% for fav in favs %}
 

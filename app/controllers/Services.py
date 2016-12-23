@@ -169,7 +169,7 @@ class Services(Controller):
 		for i in fav:
 			rate = find_rate(i['sid'])
 			i['rating'] = rate
-		return self.load_view('user.html', result = result, favs = fav)
+		return self.load_view('user.html', result = result, favs = fav, pref = pref)
 
 # routes['/add/fav/<id>'] = 'Services#add_fav'
 	def add_fav(self, id):

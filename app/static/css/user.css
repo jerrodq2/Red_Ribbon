@@ -27,7 +27,13 @@ ul.categories li{
 	margin-right: 10px;
 }
 
+
 #favs{
 	overflow-y: auto;
 	height: 700px;
+	padding-bottom: 20px;
+}
+#results{
+	overflow-y: auto;
+	height: 762px;
 }
