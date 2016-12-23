@@ -12,6 +12,24 @@ class Services(Controller):
 	def index(self):
 		return self.load_view('search.html')
 
+# routes['/recommend/service'] = 'Services#recommend_service'
+	def recommend_service(self):
+		return self.load_view('recommend.html')
+
+# routes["/create/recommendation"] = 'Services#recommend'
+	def recommend(self):
+		service = self.models['Service'].recommend(request.form.copy())
+		for message in service['errors']:
+			flash(message, service['type'])
+		return redirect('/recommend/service')
+
+# routes["/destroy/recommendation/<id>"] 'Services#destroy_recommendation'
+	def destroy_recommendation(self, id):
+		if not 'admin_status' in session['user']:
+			return redirect('/result')
+		self.models['Service'].destroy_recommendation(id)
+		return redirect('/admin')
+
 # routes['/results/<name>'] = 'Services#result_specific'
 	def result_specific(self, name):
 		result = self.models['Service'].result_specific(name)

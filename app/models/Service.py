@@ -80,7 +80,7 @@ class Service(Model):
 		try:
 			id = self.db.query_db(query, info)
 		except:
-			errors.append('There was an error, Service name, Phone number, or Email is already in use')
+			errors.append('There was an error, Service name, Phone number, or Email may already in use')
 			return {'errors': errors}
 
 		# If and else is to add the service type, add a new one if they entered that input or linking to an existing one
@@ -189,6 +189,41 @@ class Service(Model):
 		errors.append('Information successfully updated')
 		return {'errors': errors}
 
+
+	def recommend(self, info):
+		errors = []
+		EMAIL_REGEX = re.compile(r'^[a-za-z0-9\.\+_-]+@[a-za-z0-9\._-]+\.[a-za-z]*$')
+		phone_regex = re.compile(r'\((\d{3})\)\d{3}-\d{4}')
+
+		if not info['name']:
+			errors.append('Service name cannot be blank')
+		if info['user_email']:
+			if not EMAIL_REGEX.match(info['user_email']):
+				errors.append('Your personal email format must be valid')
+		if info['email']:
+			if not EMAIL_REGEX.match(info['email']):
+				errors.append('Service email format must be valid')
+		if info['phone']:
+			if not phone_regex.match(info['phone']):
+				errors.append('Phone number must be in (123)456-7890 format')
+		if not info['description']:
+			errors.append('Description cannot be blank')
+		elif len(info) < 10:
+			errors.append('Description must be at least 10 characters long')
+
+		if errors:
+			return {'errors': errors, 'type': 'errors'}
+
+		query = 'INSERT INTO recommended_service (user_name, user_email, name, email, website, phone, hours, address, description, additional) VALUES (:user_name, :user_email, :name, :email, :website, :phone, :hours, :address, :description, :additional)'
+		try:
+			self.db.query_db(query, info)
+		except:
+			errors.append('There was an error, Service name, Phone number, or Email may already in use')
+			return {'errors': errors, 'type': 'errors'}
+		errors.append('Recommendation successfully sent, we will look into this service soon, thank you for you help.')
+		return {'errors': errors, 'type': 'success'}
+
+
 	def result_specific(self, name):
 		if name == 'income_based':
 			str = 'income_restriction != 0'
@@ -223,6 +258,14 @@ class Service(Model):
 	def types(self):
 		result = self.db.query_db('SELECT * FROM type')
 		return result
+
+	def get_recommendations(self):
+		result = self.db.query_db('SELECT * FROM recommended_service')
+		return result
+
+	def destroy_recommendation(self, id):
+		destroy = self.db.query_db('DELETE FROM recommended_service WHERE id = :id', {'id': id})
+		return destroy
 
 	def destroy_service(self, id):
 		data = {'id': id}

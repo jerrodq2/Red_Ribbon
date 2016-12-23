@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Document</title>
+
+	<link rel="stylesheet" href="../static/css/search_results.css">
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body>
+	<!-- START NAVIGATION BAR -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+					<a class="navbar-brand" href="#"><img src="/static/images/logo.png" height="100px"></a>
+		    </div>
+				<!-- /end Brand -->
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/">Home Page</a></li>
+						<li><a href="/search"><b>Search Services</b></a></li>
+            <li><a href="/result"><b>All Services</b></a></li>
+						{% if session['user'] and session['user']['admin_status'] %}
+							<li><a href="/admin"><b>Admin</b></a></li>
+              <li><a href="/all_users"><b>Members</b></a></li>
+						{% endif %}
+						<li><a href="/support">Support</a></li>
+						<li><a href="/recommend/service">Recommend Service</a></li>
+						{% if session['user'] %}
+							<li><a href="/user">My Dashboard</a></li>
+							<li><a href="/edit_user">Edit Settings</a></li>
+							<li><a href="/logout">Log Out</a></li>
+						{%else%}
+							<li><a href="/login_reg">Login / Register</a></li>
+						{% endif %}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+    <!-- /END NAV -->
+
+		<div class="container panel panel-success">
+
+			<h1>Recommend a Service</h1>
+      <div class="row">
+        <div class="col-md-6">
+          {% with messages = get_flashed_messages(category_filter=['success']) %}
+    				{% if messages %}
+    					<div class="alert alert-success">
+    					{% for message in messages %}
+    						<div role="alert">{{ message }}</div>
+    					{% endfor %}
+    					</div>
+    				{% endif %}
+    			{% endwith %}
+
+    			{% with messages = get_flashed_messages(category_filter=['errors']) %}
+    				{% if messages %}
+    					<div class="alert alert-danger">
+    					{% for message in messages %}
+    						<div role="alert">{{ message }}</div>
+    					{% endfor %}
+    					</div>
+    				{% endif %}
+    			{% endwith %}
+        </div>
+      </div>
+
+
+			<form class="" action="/create/recommendation" method="post">
+          <!-- LEFT COLUMN -->
+        <div class="row"><!-- LEFT COLUMN -->
+          <div class="col-md-6">
+            <div class="form-group">
+    					<label>Your Name (optional):</label>
+    					<input class="form-control" type="text" name="user_name">
+    				</div>
+            <div class="form-group">
+    					<label>Your Email (optional):</label>
+    					<input class="form-control" type="email" name="user_email">
+    				</div>
+            <div class="form-group">
+    					<label>Service Name:</label>
+    					<input class="form-control" type="text" name="name">
+    				</div>
+            <div class="form-group">
+    					<label>Service Email (optional):</label>
+    					<input class="form-control" type="email" name="email">
+    				</div>
+          </div>
+
+
+          <div class="col-md-6"><!-- RIGHT COLUMN -->
+            <div class="form-group">
+    					<label>Website (optional):</label>
+    					<input class="form-control" type="text" name="website">
+    				</div>
+            <div class="form-group">
+    					<label>Phone (optional): </label> <small>Format: (123)456-7890</small>
+    					<input class="form-control" type="text" name="phone">
+
+    				</div>
+            <div class="form-group">
+    					<label>Hours (optional):</label>
+    					<input class="form-control" type="text" name="hours">
+    				</div>
+            <div class="form-group">
+    					<label>Address (optional):</label>
+    					<input class="form-control" type="text" name="address">
+    				</div>
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+    					<label>Description:</label>
+              <textarea name="description" class="form-control" rows="8" cols="80"></textarea>
+    				</div>
+            <div class="form-group">
+    					<label>Additional Details We Should Know (optional):</label>
+    					<textarea name="additional" class="form-control" rows="8" cols="80"></textarea>
+    				</div>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+				  <input class="btn btn-primary" type="submit" value="Submit">
+        </div>
+			</form>
+
+		</div>
+
+</body>
+</html>
