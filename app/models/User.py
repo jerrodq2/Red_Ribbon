@@ -155,7 +155,7 @@ class User(Model):
     def active_support(self):
         support = self.db.query_db("SELECT * FROM support WHERE active = 1")
         return support
-        
+
     def archived_support(self):
         support = self.db.query_db("SELECT * FROM support WHERE active = 0")
         return support
@@ -167,3 +167,7 @@ class User(Model):
     def activate_support(self, id):
         support = self.db.query_db('UPDATE support SET active = 1 WHERE id = :id', {'id': id})
         return support
+
+    def destroy_support(self, id):
+        destroy = self.db.query_db('DELETE FROM support WHERE id = :id', {'id': id})
+        return destroy
