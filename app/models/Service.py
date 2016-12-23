@@ -54,7 +54,7 @@ class Service(Model):
 		if not info['state']:
 			errors.append('State cannot be blank')
 		elif len(info['state']) != 2:
-			errors.append('Street must be 2 characters long')
+			errors.append('State must be 2 characters long')
 		if not info['city']:
 			errors.append('City cannot be blank')
 		if not info['zip']:
@@ -141,7 +141,7 @@ class Service(Model):
 		if not info['state']:
 			errors.append('State cannot be blank')
 		elif len(info['state']) != 2:
-			errors.append('Street must be 2 characters long')
+			errors.append('State must be 2 characters long')
 		if not info['city']:
 			errors.append('City cannot be blank')
 		if not info['zip']:
