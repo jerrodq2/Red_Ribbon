@@ -135,6 +135,14 @@ class User(Model):
             self.db.query_db(update, data)
             return {'status' : False}
 
+    def all_users(self):
+        users = self.db.query_db('SELECT id, alias, email FROM user WHERE admin_status = 0')
+        return users
+
+    def admins(self):
+        admins = self.db.query_db('SELECT id, alias, email FROM user WHERE admin_status = 1')
+        return admins
+
     def support(self, info):
         errors = []
 
@@ -171,3 +179,23 @@ class User(Model):
     def destroy_support(self, id):
         destroy = self.db.query_db('DELETE FROM support WHERE id = :id', {'id': id})
         return destroy
+
+    def destroy_user(self, id):
+        data = {'id': id}
+        self.db.query_db('DELETE FROM fav WHERE user_id = :id', data)
+        self.db.query_db('DELETE FROM rating WHERE user_id = :id', data)
+        self.db.query_db('DELETE FROM preference WHERE user_id = :id', data)
+        self.db.query_db('DELETE FROM feedback WHERE user_id = :id', data)
+        destroy = self.db.query_db('DELETE FROM user WHERE id = :id', data)
+        return destroy
+
+    def upgrade_status(self, id):
+        upgrade = self.db.query_db('UPDATE user SET admin_status = 1 WHERE id = :id', {'id': id})
+        return upgrade
+
+    def revoke_status(self, id):
+        check = self.db.query_db('SELECT * FROM  user WHERE admin_status = 1')
+        if len(check) == 1:
+            return {'error': 'You cannot revoke the status of the last admin'} # this is most likely a pointless check considering the previous if statement in the controller but better safe than sorry
+        self.db.query_db('UPDATE user SET admin_status = 0 WHERE id = :id', {'id': id})
+        return {'error': ''}

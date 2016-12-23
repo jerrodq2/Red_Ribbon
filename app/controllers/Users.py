@@ -70,6 +70,40 @@ class Users(Controller):
 			flash('Preferences have been successfully update', 'pref')
 			return redirect('/edit_user')
 
+# routes['/users'] = 'Users#all_users'
+	def all_users(self):
+		if session['user']['admin_status'] == 0:
+			return redirect('/')
+		users = self.models['User'].all_users()
+		admins = self.models['User'].admins()
+		return self.load_view('users.html', users = users, admins = admins)
+
+# routes["/destroy/user/<id>"]
+	def destroy_user(self, id):
+		if session['user']['admin_status'] == 0:
+			return redirect('/')
+		self.models['User'].destroy_user(id)
+		return redirect('/all_users')
+
+# routes["/create/admin/<id>"] = 'Users#upgrade_status'
+	def upgrade_status(self, id):
+		if session['user']['admin_status'] == 0:
+			return redirect('/')
+		self.models['User'].upgrade_status(id)
+		return redirect('/all_users')
+
+# routes["/destroy/admin/<id>"] = 'Users#revoke_status'
+	def revoke_status(self, id):
+		if session['user']['admin_status'] == 0:
+			return redirect('/')
+		if session['user']['id'] == int(id):
+			flash('Cannot revoke your own status')
+			return redirect("/all_users")
+		revoke = self.models['User'].revoke_status(id)
+		if revoke['error']:
+			flash(revoke['error'])
+		return redirect('/all_users')
+
 	def admin(self):
 		if session['user']['admin_status'] == 0:
 			return redirect('/user')

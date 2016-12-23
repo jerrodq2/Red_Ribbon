@@ -1,3 +1,4 @@
+
 .inbox{
   height: 500px;
   overflow-y: auto;
@@ -27,4 +28,8 @@ textarea{
 
 #address{
   padding: 0px 20px;
+}
+.user_delete{
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
