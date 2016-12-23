@@ -124,3 +124,8 @@ class Users(Controller):
 	def archive_deactivate_support(self, id):
 		self.models['User'].deactivate_support(id)
 		return redirect('/all_support')
+
+# routes["/destroy/support/<id>"] = 'Users#destroy_support'
+	def destroy_support(self, id):
+		self.models['User'].destroy_support(id)
+		return redirect('/all_support')

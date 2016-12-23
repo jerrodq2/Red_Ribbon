@@ -83,6 +83,11 @@ class Services(Controller):
 			flash(message, 'feedback')
 		return redirect('service/'+id)
 
+# routes["/destroy/feedback/<id>"] = 'Services#destroy_feedback'
+	def destroy_feedback(self, id):
+		self.models['Dashboard'].destroy_feedback(id)
+		return redirect('/all_feedback')
+
 # routes['/service/<id>'] = 'Services#profile'
 	def profile(self, id):
 		profile = self.models['Service'].profile(id)

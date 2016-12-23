@@ -14,6 +14,24 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="/static/css/admin_dash.css">
 
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			$('.confirm').hide()
+
+			$('.delete').click(function(event){
+				var id = $(this).attr('id')
+				$('#show'+id+'.confirm').show(100)
+			})
+
+			$('.cancel').click(function(event){
+				var id = $(this).attr('id')
+				$('#show'+id+'.confirm').hide(100)
+			})
+
+		})
+	</script>
+
 </head>
 <body>
     <!-- START NAVIGATION BAR -->
@@ -111,7 +129,14 @@
 										{% endif %}
 										{{ item.comment }}
 										<p>By: {{item.alias}}, <a href="/service/{{item['sid']}}">Go to Service</a></p>
-										<a id="feedback" class="btn btn-primary" href="/activate_feedback/{{ item.id }}">Remove from Archive</a>
+										<a id="feedback" class="btn btn-primary" href="/activate_feedback/{{ item['id'] }}">Remove from Archive</a>
+										<a class="btn btn-danger delete" id="{{item['id']}}">Delete</a>
+
+										<div class="confirm" id="show{{item['id']}}">
+											<a class="btn btn-danger" href="/destroy/feedback/{{item['id']}}">Delete</a>
+											<a class="cancel btn btn-success" id="{{item['id']}}">Cancel</a>
+										</div>
+
 									</td>
 								</tr>
 							{% endfor %}

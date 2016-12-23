@@ -53,6 +53,10 @@ class Dashboard(Model):
 		update = self.db.query_db('UPDATE feedback SET active = 1, updated_at = Now() WHERE id = :id', {'id': id})
 		return update
 
+	def destroy_feedback(self, id):
+		destroy = self.db.query_db('DELETE FROM feedback WHERE id = :id', {'id': id})
+		return destroy
+
 	def add_rating(self, info, id, uid):
 		errors = []
 		if not info['rating']:
