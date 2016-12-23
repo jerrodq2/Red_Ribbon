@@ -29,6 +29,19 @@
 				$('#show'+id+'.confirm').hide(100)
 			})
 
+
+			$('.rec_confirm').hide()
+
+			$('.rec_delete').click(function(event){
+				var id = $(this).attr('id')
+				$('#show'+id+'.rec_confirm').show(100)
+			})
+
+			$('.rec_cancel').click(function(event){
+				var id = $(this).attr('id')
+				$('#show'+id+'.rec_confirm').hide(100)
+			})
+
 		})
 	</script>
 
@@ -51,6 +64,7 @@
 						<li><a href="/admin"><b>Admin</b></a></li>
 						<li><a href="/all_users"><b>Members</b></a></li>
 						<li><a href="/support">Support</a></li>
+						<li><a href="/recommend/service">Recommend Service</a></li>
 						<li><a href="/user">My Dashboard</a></li>
 						<li><a href="/edit_user">Edit Settings</a></li>
             <li><a href="/logout">Logout</a></li>
@@ -318,6 +332,91 @@
 								<p>
 									<a class="btn btn-primary" href="/deactivate/support/{{i['id']}}">Archive</a>
 								</p>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+		</div>
+
+		<div class="col-xs-12 panel panel-success">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<td>
+								<h3><b>Recommended Services <span class="badge">{{rec_length}}</span></h3>
+							</td>
+						</tr>
+						{% if support == [] %}
+						<tr>
+							<td><h4>No Current Recommendations</h4></td>
+						</tr>
+						{% endif %}
+					</thead>
+					<tbody>
+						{% for i in recommended %}
+						<tr>
+							<td>
+								<p>
+									{% if i['user_name'] %}
+										Created by: {{i['user_name']}},
+									{% else %}
+										Created by: N/A,
+									{% endif %}
+
+									{% if i['user_email'] %}
+										Email: {{i['user_email']}},
+									{% else %}
+										Email: N/A,
+									{% endif %}
+								</p>
+								<p>
+									{% if i['email'] %}
+										<b>Service Name:</b> {{i['name']}}, Email: {{i['eamil']}}
+									{% else %}
+										<b>Service Name:</b>	{{i['name']}}, Email: N/A
+									{% endif %}
+								</p>
+
+								{% if i['website'] %}
+									<p>Website: <a href="http://{{i['website']}}">{{i['website']}}</a></p>
+								{% else %}
+									<p>Website: N/A</p>
+								{% endif %}
+
+								{% if i['phone'] %}
+									<p>Phone: {{i['phone']}}</p>
+								{% else %}
+									<p>Phone: N/A</p>
+								{% endif %}
+
+								{% if i['hours'] %}
+									<p>Hours: {{i['hours']}}</p>
+								{% else %}
+									<p>Hours: N/A</p>
+								{% endif %}
+
+								{% if i['address'] %}
+									<p>Address: {{i['address']}}</p>
+								{% else %}
+									<p>Address: N/A</p>
+								{% endif %}
+
+								<p><b>Description:</b> {{i['description']}}</p>
+<b></b>
+								{% if i['additional'] %}
+									Additional Notes: {{i['additional']}}
+								{% else %}
+									Additional Notes: N/A
+								{% endif %}
+
+								<p><a class="btn btn-danger rec_delete" id="{{i['id']}}">Delete Recommendation</a></p>
+
+								<div class="rec_confirm" id="show{{i['id']}}">
+									<a class="btn btn-danger" href="/destroy/recommendation/{{i['id']}}">Confirm</a>
+									<a class="btn btn-success rec_cancel" id="{{i['id']}}">Cancel</a>
+								</div>
+
 							</td>
 						</tr>
 						{% endfor %}

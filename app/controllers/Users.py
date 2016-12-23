@@ -114,7 +114,9 @@ class Users(Controller):
 		flag_length = len(flags)
 		support = self.models['User'].active_support()
 		support_length = len(support)
-		return self.load_view('admin_dash.html', feedback = feedback, types = types, length = length, flags = flags, flag_length = flag_length, support = support, support_length = support_length)
+		recommended = self.models['Service'].get_recommendations()
+		rec_length = len(recommended)
+		return self.load_view('admin_dash.html', feedback = feedback, types = types, length = length, flags = flags, flag_length = flag_length, support = support, support_length = support_length, recommended = recommended, rec_length = rec_length)
 
 	def admin_feedback(self):
 		if not 'admin_status' in session['user']:
