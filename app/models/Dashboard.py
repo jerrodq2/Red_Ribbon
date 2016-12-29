@@ -68,7 +68,7 @@ class Dashboard(Model):
 		if errors:
 			return {'errors': errors}
 
-		check = self.db.query_db('SELECT * FROM rating WHERE user_id = :uid', {'uid': uid})
+		check = self.db.query_db('SELECT * FROM rating WHERE user_id = :uid and service_id = :id', {'uid': uid, 'id': id})
 		if len(check) > 0:
 			errors.append('You cannot create more than one rating and comment per service')
 			return {'errors': errors}
