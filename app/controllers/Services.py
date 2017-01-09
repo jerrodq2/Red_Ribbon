@@ -127,8 +127,9 @@ class Services(Controller):
 # routes['/flag/rating/<id>/<sid>'] = 'Services#flag_rating'
 	def flag_rating(self, id, sid):
 		if not 'user' in session:
+			print '(********************)'
 			flash('You must be logged in to flag', 'comment')
-			return redirect('/service/'+id)
+			return redirect('/service/'+sid)
 		self.models['Dashboard'].flag_rating(id)
 		return redirect('/service/'+sid)
 
