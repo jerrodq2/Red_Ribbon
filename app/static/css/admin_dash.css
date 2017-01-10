@@ -1,13 +1,13 @@
 .inbox_admin{
-  height: 500px;
+  max-height: 500px;
   overflow-y: auto;
 }
 .members_box{
-  height: 500px;
+  max-height: 500px;
   overflow-y: auto;
 }
 .members_admin_box{
-  height: 400px;
+  max-height: 400px;
   overflow-y: auto;
 }
 .inbox{
