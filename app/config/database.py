@@ -7,7 +7,7 @@ class DBConfig(object):
 
 class DevelopmentDBConfig(DBConfig):
     DB_USERNAME = 'root'
-    DB_PASSWORD = 'mysqljerrodpassword'
+    DB_PASSWORD = 'root'
     DB_DATABASE_NAME = 'red_ribbon'
     DB_HOST = 'localhost'
     DB_PORT = 3306
