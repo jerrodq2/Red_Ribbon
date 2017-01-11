@@ -1,3 +1,4 @@
-* {
-  font-family: monaco;
+.navbar-brand img{
+  margin-top: -2px;
+  height: 75px;
 }
