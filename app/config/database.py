@@ -7,7 +7,7 @@ class DBConfig(object):
 
 class DevelopmentDBConfig(DBConfig):
     DB_USERNAME = 'root'
-    DB_PASSWORD = ''
+    DB_PASSWORD = 'Ironman.29'
     DB_DATABASE_NAME = 'red_ribbon'
     DB_HOST = 'localhost'
     DB_PORT = 3306
@@ -18,12 +18,12 @@ class DevelopmentDBConfig(DBConfig):
 
 class StagingDBConfig(DBConfig):
     DB_USERNAME = 'root'
-    DB_PASSWORD = ''
+    DB_PASSWORD = 'Ironman.29'
     DB_DATABASE_NAME = 'mydb'
     DB_HOST = 'localhost'
 
 class ProductionDBConfig(DBConfig):
     DB_USERNAME = 'root'
-    DB_PASSWORD = ''
+    DB_PASSWORD = 'Ironman.29'
     DB_DATABASE_NAME = 'mydb'
     DB_HOST = 'localhost'
